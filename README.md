@@ -9,7 +9,7 @@ This project does not contain a license, therefore you are not allowed to add on
  - Color picker
  - Reset position of menu and hud elements
  - Hide when paused
- - Multiple options like movie style and hide map
+ - Multiple options like cinematic bars and hide map
 
 # Video/Screenshot
 [![Watch the video](https://imgur.com/a/zvRMjZl.png)](https://streamable.com/xtfytg)

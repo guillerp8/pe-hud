@@ -1,23 +1,28 @@
-local showMap, showBars, showArmor, showOxygen, isOpen, movieHud, isPaused
+-- Optimizations
+local showMap, showBars, showArmor, showOxygen, isOpen, cinematicHud, isPaused
 local beepHealth, beepShield, beepStamina, beepOxygen
-local healthActive, shieldActive, staminaActive, oxygenActive, microphoneActive, timeActive, movieActive, idActive
-local healthSwitch, shieldSwitch, staminaSwitch, oxygenSwitch, microphoneSwitch, timeSwitch, movieSwitch, idSwitch
-local whisper, normal, scream = 33, 66, 100 
+local healthActive, shieldActive, staminaActive, oxygenActive, microphoneActive, timeActive, cinematicActive, idActive
+local healthSwitch, shieldSwitch, staminaSwitch, oxygenSwitch, microphoneSwitch, timeSwitch, cinematicSwitch, idSwitch
+
+-- Variables
+
+local whisper, normal, shout = 33, 66, 100 
 local microphone = normal -- Change this for default
 
 -- Main Thread
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
         local health = nil
-		local oxygen = 10 * GetPlayerUnderwaterTimeRemaining(PlayerId())
-		local stamina = 100 - GetPlayerSprintStaminaRemaining(PlayerId())
-		local armor, id = GetPedArmour(PlayerPedId()), GetPlayerServerId(PlayerId())
+		local ped = PlayerPedId()
+		local oxygen = 10 * GetPlayerUnderwaterTimeRemaining(ped)
+		local stamina = 100 - GetPlayerSprintStaminaRemaining(ped)
+		local armor, id = GetPedArmour(ped), GetPlayerServerId(ped)
 		local minutes, hours =  GetClockMinutes(), GetClockHours()
 		local players = #GetActivePlayers() * 100 / Config.MaxPlayers
-		if IsEntityDead(PlayerPedId()) then
+		if IsEntityDead(ped) then
 			health = 0
 		else
-			health = GetEntityHealth(PlayerPedId()) - 100
+			health = GetEntityHealth(ped) - 100
 		end
 		if (oxygen <= 0) then
 			oxygen = 0
@@ -29,22 +34,22 @@ Citizen.CreateThread(function()
 			hours = "0" .. hours
 		end
 		if Config.ShowArmour then
-			if (armor <= 0) and not isPaused and not shieldSwitch and not movieHud then
+			if (armor <= 0) and not isPaused and not shieldSwitch and not cinematicHud then
 					SendNUIMessage({action = 'armorHide'})
 					shieldActive = true
 					showArmor = true
-			elseif (armor >= 1) and shieldActive and not shieldSwitch and not isPaused and not movieHud then
-				SendNUIMessage({action = 'armorT'})
+			elseif (armor >= 1) and shieldActive and not shieldSwitch and not isPaused and not cinematicHud then
+				SendNUIMessage({action = 'armorShow'})
 				shieldActive = false
 				showArmor = false
 			end
 		end
 		if Config.ShowOxygen then
-			if IsEntityInWater(PlayerPedId()) and not isPaused and oxygenSwitch and not movieHud then
-					SendNUIMessage({action = 'oxygenT'})
+			if IsEntityInWater(ped) and not isPaused and oxygenSwitch and not cinematicHud then
+					SendNUIMessage({action = 'oxygenShow'})
 					oxygenActive = true
 					showOxygen = true
-			elseif not IsEntityInWater(PlayerPedId()) and oxygenActive and oxygenSwitch and not isPaused and not movieHud then
+			elseif not IsEntityInWater(ped) and oxygenActive and oxygenSwitch and not isPaused and not cinematicHud then
 				SendNUIMessage({action = 'oxygenHide'})
 				oxygenActive = false
 				showOxygen = false
@@ -109,46 +114,46 @@ Citizen.CreateThread(function()
 				idActive = false
 				SendNUIMessage({action = 'idHide'})
 			end
-			if movieActive then
-				movieActive = false
-				SendNUIMessage({action = 'movieHide'})
+			if cinematicActive then
+				cinematicActive = false
+				SendNUIMessage({action = 'cinematicHide'})
 			end
 			isPaused = true
-		elseif not IsPauseMenuActive() and isPaused and not movieHud then
+		elseif not IsPauseMenuActive() and isPaused and not cinematicHud then
 			if healthActive and not healthSwitch then
 				healthActive = false
-				SendNUIMessage({action = 'healthT'})
+				SendNUIMessage({action = 'healthShow'})
 			end
 			if shieldActive and not shieldSwitch and not showArmor then
 				shieldActive = false
-				SendNUIMessage({action = 'armorT'})
+				SendNUIMessage({action = 'armorShow'})
 			end
 			if staminaActive and not staminaSwitch then
 				staminaActive = false
-				SendNUIMessage({action = 'staminaT'})
+				SendNUIMessage({action = 'staminaShow'})
 			end
 			if not oxygenActive and oxygenSwitch and showOxygen then
 				oxygenActive = true
-				SendNUIMessage({action = 'oxygenT'})
+				SendNUIMessage({action = 'oxygenShow'})
 			end
 			if not microphoneActive and microphoneSwitch then
 				microphoneActive = true
-				SendNUIMessage({action = 'microphoneT'})
+				SendNUIMessage({action = 'microphoneShow'})
 			end
 			if not timeActive and timeSwitch then
 				timeActive = true
-				SendNUIMessage({action = 'timeT'})
+				SendNUIMessage({action = 'timeShow'})
 			end
-			if not movieActive and movieSwitch then
-				movieActive = true
-				SendNUIMessage({action = 'movieT'})
+			if not cinematicActive and cinematicSwitch then
+				cinematicActive = true
+				SendNUIMessage({action = 'cinematicShow'})
 			end
 			if not idActive and idSwitch then
 				idActive = true
-				SendNUIMessage({action = 'idT'})
+				SendNUIMessage({action = 'idShow'})
 			end
 			isPaused = false
-		elseif not IsPauseMenuActive() and movieHud and isPaused then
+		elseif not IsPauseMenuActive() and cinematicHud and isPaused then
 			if not healthActive then
 				healthActive = true
 				SendNUIMessage({action = 'healthHide'})
@@ -177,8 +182,8 @@ Citizen.CreateThread(function()
 				idActive = false
 				SendNUIMessage({action = 'idHide'})
 			end
-			movieActive = true
-			SendNUIMessage({action = 'movieT'})
+			cinematicActive = true
+			SendNUIMessage({action = 'cinematicShow'})
 			isPaused = false
 		end
 		SendNUIMessage({
@@ -191,13 +196,13 @@ Citizen.CreateThread(function()
 			players = players,
 			time = hours .. " : " .. minutes
 		})
-		Citizen.Wait(420)
+		Wait(420)
 	end
 end)
 
-Citizen.CreateThread(function()
+CreateThread(function()
     while isOpen do
-        Citizen.Wait(100)
+        Wait(100)
         DisableControlAction(0, 322, true)
     end
 end)
@@ -223,7 +228,7 @@ AddEventHandler('PE:change', function(action)
 		else
 			healthActive = false
 			healthSwitch = false
-			SendNUIMessage({action = 'healthT'})
+			SendNUIMessage({action = 'healthShow'})
 		end
     elseif action == "armor" then
 		if not shieldActive then
@@ -233,7 +238,7 @@ AddEventHandler('PE:change', function(action)
 		else
 			shieldActive = false
 			shieldSwitch = false
-			SendNUIMessage({action = 'armorT'})
+			SendNUIMessage({action = 'armorShow'})
 		end
     elseif action == "stamina" then
 		if not staminaActive then
@@ -243,13 +248,13 @@ AddEventHandler('PE:change', function(action)
 		else
 			staminaActive = false
 			staminaSwitch = false
-			SendNUIMessage({action = 'staminaT'})
+			SendNUIMessage({action = 'staminaShow'})
 		end
 	elseif action == "oxygen" then
 		if not oxygenActive then
 			oxygenActive = true
 			oxygenSwitch = true
-			SendNUIMessage({action = 'oxygenT'})
+			SendNUIMessage({action = 'oxygenShow'})
 		else
 			oxygenActive = false
 			oxygenSwitch = false
@@ -259,7 +264,7 @@ AddEventHandler('PE:change', function(action)
 		if not idActive then
 			idActive = true
 			idSwitch = true
-			SendNUIMessage({action = 'idT'})
+			SendNUIMessage({action = 'idShow'})
 		else
 			idActive = false
 			idSwitch = false
@@ -273,11 +278,11 @@ AddEventHandler('PE:change', function(action)
 			showMap = false
 			DisplayRadar(false)
 		end
-	elseif action == "movie" then
-		if not movieActive then
-			movieActive = true
-			movieSwitch = true
-			movieHud = true
+	elseif action == "cinematic" then
+		if not cinematicActive then
+			cinematicActive = true
+			cinematicSwitch = true
+			cinematicHud = true
 			if not healthActive then
 				healthActive = true
 				SendNUIMessage({action = 'healthHide'})
@@ -306,50 +311,50 @@ AddEventHandler('PE:change', function(action)
 				idActive = false
 				SendNUIMessage({action = 'idHide'})
 			end
-			SendNUIMessage({action = 'movieT'})
+			SendNUIMessage({action = 'cinematicShow'})
 		else
-			movieActive = false
-			movieSwitch = false
-			movieHud = false
+			cinematicActive = false
+			cinematicSwitch = false
+			cinematicHud = false
 			if healthActive and not healthSwitch then
 				healthActive = false
-				SendNUIMessage({action = 'healthT'})
+				SendNUIMessage({action = 'healthShow'})
 			end
 			if shieldActive and not shieldSwitch and not showArmor then
 				shieldActive = false
-				SendNUIMessage({action = 'armorT'})
+				SendNUIMessage({action = 'armorShow'})
 			end
 			if staminaActive and not staminaSwitch then
 				staminaActive = false
-				SendNUIMessage({action = 'staminaT'})
+				SendNUIMessage({action = 'staminaShow'})
 			end
 			if not oxygenActive and oxygenSwitch and showOxygen then
 				oxygenActive = true
-				SendNUIMessage({action = 'oxygenT'})
+				SendNUIMessage({action = 'oxygenShow'})
 			end
 			if not microphoneActive and microphoneSwitch then
 				microphoneActive = true
-				SendNUIMessage({action = 'microphoneT'})
+				SendNUIMessage({action = 'microphoneShow'})
 			end
 			if not timeActive and timeSwitch then
 				timeActive = true
-				SendNUIMessage({action = 'timeT'})
+				SendNUIMessage({action = 'timeShow'})
 			end
-			if not movieActive and movieSwitch then
-				movieActive = true
-				SendNUIMessage({action = 'movieT'})
+			if not cinematicActive and cinematicSwitch then
+				cinematicActive = true
+				SendNUIMessage({action = 'cinematicShow'})
 			end
 			if not idActive and idSwitch then
 				idActive = true
-				SendNUIMessage({action = 'idT'})
+				SendNUIMessage({action = 'idShow'})
 			end
-			SendNUIMessage({action = 'movieHide'})
+			SendNUIMessage({action = 'cinematicHide'})
 		end
 	elseif action == "time" then
 		if not timeActive then
 			timeActive = true
 			timeSwitch = true
-			SendNUIMessage({action = 'timeT'})
+			SendNUIMessage({action = 'timeShow'})
 		else
 			timeActive = false
 			timeSwitch = false
@@ -359,7 +364,7 @@ AddEventHandler('PE:change', function(action)
 		if not microphoneActive then
 			microphoneActive = true
 			microphoneSwitch = true
-			SendNUIMessage({action = 'microphoneT'})
+			SendNUIMessage({action = 'microphoneShow'})
 		else
 			microphoneActive = false
 			microphoneSwitch = false
@@ -385,7 +390,7 @@ RegisterCommand('+levelVoice', function()
 			microphone = microphone
 		})
 	elseif (microphone == 66) then
-		microphone = scream
+		microphone = shout
 		SendNUIMessage({
 			action = "microphone",
 			microphone = microphone

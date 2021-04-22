@@ -3,11 +3,11 @@ window.addEventListener("message", function (event) {
   switch (event.data.action) {
     case "show":
       $("#drag-browser").fadeIn();
-    break;
-    
+      break;
+
     case "hide":
       $("#drag-browser").fadeOut();
-    break;
+      break;
 
     // Send Data
     case "hud":
@@ -18,175 +18,171 @@ window.addEventListener("message", function (event) {
       progressCircle(event.data.players, ".id");
       $("#idnumber").text(event.data.id)
       $("#time").text(event.data.time)
-    break;
+      break;
 
     case "microphone":
       progressCircle(event.data.microphone, ".microphone");
-    break;
+      break;
 
     // Hide elements
     case "healthHide":
       $("#health").fadeOut();
-    break;
+      break;
 
     case "armorHide":
       $("#armor").fadeOut();
-    break;
-    
+      break;
+
     case "staminaHide":
       $("#stamina").fadeOut();
-    break;
-    
+      break;
+
     case "oxygenHide":
       $("#oxygen").fadeOut();
-    break;
+      break;
 
     case "idHide":
       $("#id").fadeOut();
-    break;
+      break;
 
-    case "movieHide":
-      $("#movie").fadeOut();
-    break;
+    case "cinematicHide":
+      $("#cinematic").fadeOut();
+      break;
 
     case "timeHide":
       $("#time").fadeOut();
-    break;
+      break;
 
     case "microphoneHide":
       $("#microphone").fadeOut();
-    break;
+      break;
 
     // Show elements
-    case "healthT":
+    case "healthShow":
       $("#health").fadeIn();
-    break;
+      break;
 
-    case "armorT":
+    case "armorShow":
       $("#armor").fadeIn();
-    break;
+      break;
 
-    case "staminaT":
+    case "staminaShow":
       $("#stamina").fadeIn();
-    break;
+      break;
 
-    case "oxygenT":
+    case "oxygenShow":
       $("#oxygen").fadeIn();
-    break;
+      break;
 
-    case "idT":
+    case "idShow":
       $("#id").fadeIn();
-    break;
+      break;
 
-    case "movieT":
-      $("#movie").fadeIn();
-    break;
+    case "cinematicShow":
+      $("#cinematic").fadeIn();
+      break;
 
-    case "timeT":
+    case "timeShow":
       $("#time").fadeIn();
-    break;
+      break;
 
-    case "microphoneT":
+    case "microphoneShow":
       $("#microphone").fadeIn();
-    break;
-
-    case "microphoneT":
-      $("#microphone").fadeIn();
-    break;
+      break;
 
     // Pulse elements
     case "healthStart":
       document.getElementById("health").style.animation = "pulse 1.5s linear infinite";
-    break;
+      break;
 
     case "healthStop":
       document.getElementById("health").style.animation = "none";
-    break;
+      break;
 
     case "armorStart":
       document.getElementById("armor").style.animation = "pulse 1.5s linear infinite";
-    break;
+      break;
 
     case "armorStop":
       document.getElementById("armor").style.animation = "none";
-    break;
+      break;
 
     case "staminaStart":
       document.getElementById("stamina").style.animation = "pulse 1.5s linear infinite";
-    break;
+      break;
 
     case "staminaStop":
       document.getElementById("stamina").style.animation = "none";
-    break;
+      break;
 
     case "oxygenStart":
       document.getElementById("oxygen").style.animation = "pulse 1.5s linear infinite";
-    break;
-    
+      break;
+
     case "oxygenStop":
       document.getElementById("oxygen").style.animation = "none";
-    break;
+      break;
   }
 });
 
-$(function() {
-  $('#color-block').on('colorchange', function() {
+$(function () {
+  $('#color-block').on('colorchange', function () {
     let color = $(this).wheelColorPicker('value')
     switch ($("#selection").val()) {
       case "health-option":
         $('#health-circle').css('stroke', color);
-      break;
+        break;
 
       case "shield-option":
         $('#armor-circle').css('stroke', color);
-      break;
+        break;
 
       case "stamina-option":
         $('#stamina-circle').css('stroke', color);
-      break;
+        break;
 
       case "oxygen-option":
         $('#oxygen-circle').css('stroke', color);
-      break;
+        break;
 
       case "microphone-option":
         $('#microphone-circle').css('stroke', color);
-      break;
+        break;
 
       case "id-option":
         $('#id-circle').css('stroke', color);
-      break;
+        break;
 
       case "time-option":
         $('#time').css('color', color);
-      break;
+        break;
     };
   });
 });
 
-$("#health-switch").click(function() { $.post('https://pe-hud/change', JSON.stringify({action: 'health'}));})
-$("#armor-switch").click(function() {$.post('https://pe-hud/change', JSON.stringify({action: 'armor'}));})
-$("#stamina-switch").click(function() {$.post('https://pe-hud/change', JSON.stringify({action: 'stamina'}));})
-$("#oxygen-switch").click(function() {$.post('https://pe-hud/change', JSON.stringify({action: 'oxygen'}))})
-$("#map-switch").click(function() {$.post('https://pe-hud/change', JSON.stringify({action: 'map'}))})
-$("#id-switch").click(function() {$.post('https://pe-hud/change', JSON.stringify({action: 'id'}))})
-$("#movie-switch").click(function() {$.post('https://pe-hud/change', JSON.stringify({action: 'movie'}))})
-$("#time-switch").click(function() {$.post('https://pe-hud/change', JSON.stringify({action: 'time'}))})
-$("#microphone-switch").click(function() {$.post('https://pe-hud/change', JSON.stringify({action: 'microphone'}))})
-$("#close").click(function() {$.post('https://pe-hud/close')})
-$("#reset").click(function() {$("#drag-browser").animate({top: "", left: "50%"});})
+$("#health-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'health' })); })
+$("#armor-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'armor' })); })
+$("#stamina-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'stamina' })); })
+$("#oxygen-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'oxygen' })) })
+$("#map-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'map' })) })
+$("#id-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'id' })) })
+$("#cinematic-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'cinematic' })) })
+$("#time-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'time' })) })
+$("#microphone-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'microphone' })) })
+$("#close").click(function () { $.post('https://pe-hud/close') })
+$("#reset").click(function () { $("#drag-browser").animate({ top: "", left: "50%" }); })
 
-$("#reset-position").click(function() {
-  $("#health").animate({top: "0px", left: "0px"});
-  $("#armor").animate({top: "0px", left: "0px"});
-  $("#stamina").animate({top: "0px", left: "0px"});
-  $("#oxygen").animate({top: "0px", left: "0px"});
-  $("#id").animate({top: "0px", left: "0px"});
-  $("#time").animate({top: "0px", left: "50%"});
-  $("#microphone").animate({top: "0px", left: "0px"});
+$("#reset-position").click(function () {
+  $("#health").animate({ top: "0px", left: "0px" });
+  $("#armor").animate({ top: "0px", left: "0px" });
+  $("#stamina").animate({ top: "0px", left: "0px" });
+  $("#oxygen").animate({ top: "0px", left: "0px" });
+  $("#id").animate({ top: "0px", left: "0px" });
+  $("#time").animate({ top: "0px", left: "50%" });
+  $("#microphone").animate({ top: "0px", left: "0px" });
 });
 
-$("#reset-color").click(function() {
+$("#reset-color").click(function () {
   $('#health-circle').css('stroke', '');
   $('#armor-circle').css('stroke', '');
   $('#stamina-circle').css('stroke', '');
@@ -196,18 +192,18 @@ $("#reset-color").click(function() {
   $('#time').css('color', '');
 });
 
-$(function() {
-  $('#color-block').on('colorchange', function() {
-      let color = $(this).wheelColorPicker('value');
-      let alpha = $(this).wheelColorPicker('color').a;
-      $('.color-preview-box').css('background-color', color);
-      $('.color-preview-alpha').text(Math.round(alpha * 100) + '%');
+$(function () {
+  $('#color-block').on('colorchange', function () {
+    let color = $(this).wheelColorPicker('value');
+    let alpha = $(this).wheelColorPicker('color').a;
+    $('.color-preview-box').css('background-color', color);
+    $('.color-preview-alpha').text(Math.round(alpha * 100) + '%');
   });
 });
 
-document.onkeyup = function(event) {
+document.onkeyup = function (event) {
   if (event.key == 'Escape') {
-      $.post('https://pe-hud/close');
+    $.post('https://pe-hud/close');
   }
 };
 
