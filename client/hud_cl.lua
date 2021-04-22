@@ -1,6 +1,6 @@
 -- Optimizations
 local showMap, showBars, showArmor, showOxygen, isOpen, cinematicHud, isPaused
-local beepHealth, beepShield, beepStamina, beepOxygen
+local pulseHealth, pulseShield, pulseStamina, pulseOxygen
 local healthActive, shieldActive, staminaActive, oxygenActive, microphoneActive, timeActive, cinematicActive, idActive
 local healthSwitch, shieldSwitch, staminaSwitch, oxygenSwitch, microphoneSwitch, timeSwitch, cinematicSwitch, idSwitch
 
@@ -15,11 +15,12 @@ CreateThread(function()
         local health 			= nil
 		local ped 				= PlayerPedId()
 		local pedId 			= PlayerId()
-		local oxygen 			= 10 * GetPlayerUnderwaterTimeRemaining(pedId)
+		local oxygen 			= GetPlayerUnderwaterTimeRemaining(pedId) * Config.oxygenMax
 		local stamina 			= 100 - GetPlayerSprintStaminaRemaining(pedId)
 		local armor, id 		= GetPedArmour(ped), GetPlayerServerId(pedId)
-		local minutes, hours 	=  GetClockMinutes(), GetClockHours()
+		local minutes, hours 	= GetClockMinutes(), GetClockHours()
 		local players 			= #GetActivePlayers() * 100 / Config.maxPlayers
+
 		if IsEntityDead(ped) then
 			health = 0
 		else
@@ -34,56 +35,71 @@ CreateThread(function()
 		if (hours <= 9) then
 			hours = "0" .. hours
 		end
-		if Config.hideArmor then
-			if (armor <= 0) and not isPaused and not shieldSwitch and not cinematicHud then
+		
+		if Config.hideArmor and not cinematicHud and not isPaused then
+			if (armor <= 0) then
+				if not shieldSwitch then
 					SendNUIMessage({action = 'armorHide'})
+					shieldActive = false
+					showArmor = false
+				else
+					SendNUIMessage({action = 'armorShow'})
 					shieldActive = true
 					showArmor = true
-			elseif (armor >= 1) and shieldActive and not shieldSwitch and not isPaused and not cinematicHud then
+				end
+			else
 				SendNUIMessage({action = 'armorShow'})
-				shieldActive = false
-				showArmor = false
+				shieldActive = true
+				showArmor = true
 			end
 		end
-		if Config.hideOxygen then
-			if IsEntityInWater(ped) and not isPaused and oxygenSwitch and not cinematicHud then
-					SendNUIMessage({action = 'oxygenShow'})
-					oxygenActive = true
-					showOxygen = true
-			elseif not IsEntityInWater(ped) and oxygenActive and oxygenSwitch and not isPaused and not cinematicHud then
+		if Config.hideOxygen and not cinematicHud and not isPaused then
+			if IsEntityInWater(ped) then
+				SendNUIMessage({action = 'oxygenShow'})
+				oxygenActive = true
+				showOxygen = true
+			else
 				SendNUIMessage({action = 'oxygenHide'})
 				oxygenActive = false
 				showOxygen = false
 			end
 		end
-		if Config.BeepHud then
-			if (health <= 35) and not (health == 0) and not beepHealth then
-				SendNUIMessage({action = 'healthStart'})
-				beepHealth = true
-			else
-				SendNUIMessage({action = 'healthStop'})
-				beepHealth = false
+		if Config.pulseHud then
+			if (health <= 35) and not (health == 0) then
+				if not pulseHealth then
+					SendNUIMessage({action = 'healthStart'})
+					pulseHealth = true
+				else 
+					SendNUIMessage({action = 'healthStop'})
+					pulseHealth = false
+				end
 			end
-			if (armor <= 35) and not (armor == 0) and not beepShield then
-				SendNUIMessage({action = 'armorStart'})
-				beepShield = true
-			else
-				SendNUIMessage({action = 'armorStop'})
-				beepShield = false
+			if (armor <= 35) and not (armor == 0) then
+				if not pulseShield then
+					SendNUIMessage({action = 'armorStart'})
+					pulseShield = true
+				else
+					SendNUIMessage({action = 'armorStop'})
+					pulseShield = false
+				end
 			end
-			if (stamina <= 35) and not beepStamina then
-				SendNUIMessage({action = 'staminaStart'})
-				beepStamina = true
-			else
-				SendNUIMessage({action = 'staminaStop'})
-				beepStamina = false
+			if (stamina <= 35) then 
+				if not pulseStamina then
+					SendNUIMessage({action = 'staminaStart'})
+					pulseStamina = true
+				else
+					SendNUIMessage({action = 'staminaStop'})
+					pulseStamina = false
+				end
 			end
-			if (oxygen <= 35) and not (oxygen == 0) and not beepOxygen then
-				SendNUIMessage({action = 'oxygenStart'})
-				beepOxygen = true
-			else
-				SendNUIMessage({action = 'oxygenStop'})
-				beepOxygen = false
+			if (oxygen <= 35) and not (oxygen == 0) then 
+				if not pulseOxygen then
+					SendNUIMessage({action = 'oxygenStart'})
+					pulseOxygen = true
+				else
+					SendNUIMessage({action = 'oxygenStop'})
+					pulseOxygen = false
+				end
 			end
 		end
 		if IsPauseMenuActive() and not isPaused and not isOpen then
