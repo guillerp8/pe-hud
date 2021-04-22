@@ -3,11 +3,11 @@ window.addEventListener("message", function (event) {
   switch (event.data.action) {
     case "show":
       $("#drag-browser").fadeIn();
-      break;
+    break;
 
     case "hide":
       $("#drag-browser").fadeOut();
-      break;
+    break;
 
     // Send Data
     case "hud":
@@ -18,110 +18,110 @@ window.addEventListener("message", function (event) {
       progressCircle(event.data.players, ".id");
       $("#idnumber").text(event.data.id)
       $("#time").text(event.data.time)
-      break;
+    break;
 
     case "microphone":
       progressCircle(event.data.microphone, ".microphone");
-      break;
+    break;
 
     // Hide elements
     case "healthHide":
       $("#health").fadeOut();
-      break;
+    break;
 
     case "armorHide":
       $("#armor").fadeOut();
-      break;
+    break;
 
     case "staminaHide":
       $("#stamina").fadeOut();
-      break;
+    break;
 
     case "oxygenHide":
       $("#oxygen").fadeOut();
-      break;
+    break;
 
     case "idHide":
       $("#id").fadeOut();
-      break;
+    break;
 
     case "cinematicHide":
       $("#cinematic").fadeOut();
-      break;
+    break;
 
     case "timeHide":
       $("#time").fadeOut();
-      break;
+    break;
 
     case "microphoneHide":
       $("#microphone").fadeOut();
-      break;
+    break;
 
     // Show elements
     case "healthShow":
       $("#health").fadeIn();
-      break;
+    break;
 
     case "armorShow":
       $("#armor").fadeIn();
-      break;
+    break;
 
     case "staminaShow":
       $("#stamina").fadeIn();
-      break;
+    break;
 
     case "oxygenShow":
       $("#oxygen").fadeIn();
-      break;
+    break;
 
     case "idShow":
       $("#id").fadeIn();
-      break;
+    break;
 
     case "cinematicShow":
       $("#cinematic").fadeIn();
-      break;
+    break;
 
     case "timeShow":
       $("#time").fadeIn();
-      break;
+    break;
 
     case "microphoneShow":
       $("#microphone").fadeIn();
-      break;
+    break;
 
     // Pulse elements
     case "healthStart":
       document.getElementById("health").style.animation = "pulse 1.5s linear infinite";
-      break;
+    break;
 
     case "healthStop":
       document.getElementById("health").style.animation = "none";
-      break;
+    break;
 
     case "armorStart":
       document.getElementById("armor").style.animation = "pulse 1.5s linear infinite";
-      break;
+    break;
 
     case "armorStop":
       document.getElementById("armor").style.animation = "none";
-      break;
+    break;
 
     case "staminaStart":
       document.getElementById("stamina").style.animation = "pulse 1.5s linear infinite";
-      break;
+    break;
 
     case "staminaStop":
       document.getElementById("stamina").style.animation = "none";
-      break;
+    break;
 
     case "oxygenStart":
       document.getElementById("oxygen").style.animation = "pulse 1.5s linear infinite";
-      break;
+    break;
 
     case "oxygenStop":
       document.getElementById("oxygen").style.animation = "none";
-      break;
+    break;
   }
 });
 
@@ -131,31 +131,31 @@ $(function () {
     switch ($("#selection").val()) {
       case "health-option":
         $('#health-circle').css('stroke', color);
-        break;
+      break;
 
       case "shield-option":
         $('#armor-circle').css('stroke', color);
-        break;
+      break;
 
       case "stamina-option":
         $('#stamina-circle').css('stroke', color);
-        break;
+      break;
 
       case "oxygen-option":
         $('#oxygen-circle').css('stroke', color);
-        break;
+      break;
 
       case "microphone-option":
         $('#microphone-circle').css('stroke', color);
-        break;
+      break;
 
       case "id-option":
         $('#id-circle').css('stroke', color);
-        break;
+      break;
 
       case "time-option":
         $('#time').css('color', color);
-        break;
+      break;
     };
   });
 });
