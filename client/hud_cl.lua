@@ -12,14 +12,14 @@ local microphone = normal -- Change this for default
 -- Main Thread
 CreateThread(function()
 	while true do
-        local health = nil
-		local ped = PlayerPedId()
-		local pedId = PlayerId()
-		local oxygen = 10 * GetPlayerUnderwaterTimeRemaining(pedId)
-		local stamina = 100 - GetPlayerSprintStaminaRemaining(pedId)
-		local armor, id = GetPedArmour(ped), GetPlayerServerId(pedId)
-		local minutes, hours =  GetClockMinutes(), GetClockHours()
-		local players = #GetActivePlayers() * 100 / Config.MaxPlayers
+        local health 			= nil
+		local ped 				= PlayerPedId()
+		local pedId 			= PlayerId()
+		local oxygen 			= 10 * GetPlayerUnderwaterTimeRemaining(pedId)
+		local stamina 			= 100 - GetPlayerSprintStaminaRemaining(pedId)
+		local armor, id 		= GetPedArmour(ped), GetPlayerServerId(pedId)
+		local minutes, hours 	=  GetClockMinutes(), GetClockHours()
+		local players 			= #GetActivePlayers() * 100 / Config.maxPlayers
 		if IsEntityDead(ped) then
 			health = 0
 		else
@@ -34,7 +34,7 @@ CreateThread(function()
 		if (hours <= 9) then
 			hours = "0" .. hours
 		end
-		if Config.ShowArmour then
+		if Config.hideArmor then
 			if (armor <= 0) and not isPaused and not shieldSwitch and not cinematicHud then
 					SendNUIMessage({action = 'armorHide'})
 					shieldActive = true
@@ -45,7 +45,7 @@ CreateThread(function()
 				showArmor = false
 			end
 		end
-		if Config.ShowOxygen then
+		if Config.hideOxygen then
 			if IsEntityInWater(ped) and not isPaused and oxygenSwitch and not cinematicHud then
 					SendNUIMessage({action = 'oxygenShow'})
 					oxygenActive = true
@@ -407,7 +407,7 @@ end)
 
 RegisterKeyMapping('hud', 'Open the hud menu', 'keyboard', Config.openKey)
 
-RegisterKeyMapping('+levelVoice', 'Do not use', 'keyboard', Config.VoiceChange)
+RegisterKeyMapping('+levelVoice', 'Do not use', 'keyboard', Config.voiceChange)
 
 -- Handler
 AddEventHandler('playerSpawned', function()
