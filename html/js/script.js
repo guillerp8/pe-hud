@@ -18,10 +18,9 @@ $(function() {
   $("#drag-browser").draggable();
 } );
 
-// This code could be done better. However, I don't feel like re-writing this.
+// Switches & Cases
 window.addEventListener("message", function(event) {
   switch (event.data.action) {
-
     case "show":
       $("#drag-browser").fadeIn();
     break;
