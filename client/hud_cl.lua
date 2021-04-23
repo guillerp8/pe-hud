@@ -1,13 +1,25 @@
 -- Optimizations
 local showMap, showBars, showArmor, showOxygen, isOpen, cinematicHud, isPaused
 local pulseHealth, pulseShield, pulseStamina, pulseOxygen
-local healthActive, shieldActive, staminaActive, oxygenActive, microphoneActive, timeActive, cinematicActive, idActive
-local healthSwitch, shieldSwitch, staminaSwitch, oxygenSwitch, microphoneSwitch, timeSwitch, cinematicSwitch, idSwitch
+local healthActive, shieldActive, hungerActive, thirstActive, stressActive, staminaActive, oxygenActive, microphoneActive, timeActive, cinematicActive, idActive
+local healthSwitch, shieldSwitch, hungerSwitch, thirstSwitch, stressSwitch, staminaSwitch, oxygenSwitch, microphoneSwitch, timeSwitch, cinematicSwitch, idSwitch
 
 -- Variables
 
 local whisper, normal, shout = 33, 66, 100 
 local microphone = normal -- Change this for default
+
+if Config.useESX then
+    ESX              = nil
+    local PlayerData = {}
+
+    CreateThread(function()
+        while ESX == nil do
+            TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+            Wait(250)
+        end
+    end)
+end
 
 -- Main Thread
 CreateThread(function()
@@ -213,7 +225,7 @@ CreateThread(function()
 			players = players,
 			time = hours .. " : " .. minutes
 		})
-		Wait(100)
+		Wait(420) -- Set to 100 so the hud is more fluid.
 	end
 end)
 

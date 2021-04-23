@@ -12,3 +12,6 @@ Config.pulseStart   = 35 -- Minimal value for pulse to start.
 Config.voiceChange  = 'z'
 Config.openKey      = 'f7'
 Config.oxygenMax    = 10 -- Set to 10 / 4 if using vMenu
+
+-- Variables (Framework)
+Config.useESX       = false
