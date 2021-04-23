@@ -65,41 +65,41 @@ CreateThread(function()
 			end
 		end
 		if Config.pulseHud then
-			if (health <= 35) and not (health == 0) then
+			if (health <= Config.pulseStart) and not (health == 0) then
 				if not pulseHealth then
 					SendNUIMessage({action = 'healthStart'})
 					pulseHealth = true
-				else 
-					SendNUIMessage({action = 'healthStop'})
-					pulseHealth = false
 				end
+			elseif (health > Config.pulseStart) and pulseHealth then
+				SendNUIMessage({action = 'healthStop'})
+				pulseHealth = false
 			end
-			if (armor <= 35) and not (armor == 0) then
+			if (armor <= Config.pulseStart) and not (armor == 0) then
 				if not pulseShield then
 					SendNUIMessage({action = 'armorStart'})
 					pulseShield = true
-				else
-					SendNUIMessage({action = 'armorStop'})
-					pulseShield = false
 				end
+			elseif (armor > Config.pulseStart) and pulseShield then
+				SendNUIMessage({action = 'armorStop'})
+				pulseShield = false
 			end
-			if (stamina <= 35) then 
+			if (stamina <= Config.pulseStart) then 
 				if not pulseStamina then
 					SendNUIMessage({action = 'staminaStart'})
 					pulseStamina = true
-				else
-					SendNUIMessage({action = 'staminaStop'})
-					pulseStamina = false
 				end
+			elseif (stamina > Config.pulseStart) and pulseStamina then
+				SendNUIMessage({action = 'staminaStop'})
+				pulseStamina = false
 			end
-			if (oxygen <= 35) and not (oxygen == 0) then 
+			if (oxygen <= Config.pulseStart) and not (oxygen == 0) then 
 				if not pulseOxygen then
 					SendNUIMessage({action = 'oxygenStart'})
 					pulseOxygen = true
-				else
-					SendNUIMessage({action = 'oxygenStop'})
-					pulseOxygen = false
 				end
+			elseif (oxygen > Config.pulseStart) and pulseOxygen then
+				SendNUIMessage({action = 'staminaStop'})
+				pulseStamina = false
 			end
 		end
 		if IsPauseMenuActive() and not isPaused and not isOpen then
@@ -213,7 +213,7 @@ CreateThread(function()
 			players = players,
 			time = hours .. " : " .. minutes
 		})
-		Wait(420)
+		Wait(100)
 	end
 end)
 
