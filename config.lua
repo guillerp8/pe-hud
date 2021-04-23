@@ -8,6 +8,8 @@ Config.hideOxygen   = true
 Config.pulseHud     = true -- Pulse Effect when status is below the configured amount.
 Config.pulseStart   = 35 -- Minimal value for pulse to start.
 
+Config.waitTime     = 420  -- Set to 100 so the hud is more fluid. However, performance will be affected.
+
 -- Variables (Controls)
 Config.voiceChange  = 'z'
 Config.openKey      = 'f7'

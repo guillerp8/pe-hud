@@ -270,7 +270,7 @@ CreateThread(function()
 				time = hours .. " : " .. minutes
 			})
 		end
-		Wait(420) -- Set to 100 so the hud is more fluid.
+		Wait(Config.waitTime)
 	end
 end)
 
