@@ -40,17 +40,17 @@ CreateThread(function()
 			if (armor <= 0) then
 				if not shieldSwitch then
 					SendNUIMessage({action = 'armorHide'})
-					shieldActive = false
-					showArmor = false
-				else
-					SendNUIMessage({action = 'armorShow'})
 					shieldActive = true
 					showArmor = true
+				else
+					SendNUIMessage({action = 'armorShow'})
+					shieldActive = false
+					showArmor = false
 				end
-			else
+			elseif not shieldSwitch then
 				SendNUIMessage({action = 'armorShow'})
-				shieldActive = true
-				showArmor = true
+				shieldActive = false
+				showArmor = false
 			end
 		end
 		if Config.hideOxygen and not cinematicHud and not isPaused then
@@ -421,9 +421,9 @@ RegisterCommand('+levelVoice', function()
 	end
 end)
 
-RegisterKeyMapping('hud', 'Open the hud menu', 'keyboard', Config.openKey)
+RegisterKeyMapping('hud', 'Open hud Menu', 'keyboard', Config.openKey)
 
-RegisterKeyMapping('+levelVoice', 'Do not use', 'keyboard', Config.voiceChange)
+RegisterKeyMapping('+levelVoice', 'Adjust Voice Range', 'keyboard', Config.voiceChange)
 
 -- Handler
 AddEventHandler('playerSpawned', function()
