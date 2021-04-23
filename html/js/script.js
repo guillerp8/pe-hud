@@ -2,6 +2,22 @@ Config = {
   useESX = false
 }
 
+// Set everything to be draggable
+$(function() {
+  if (Config.useESX) {
+    $("#hunger").draggable();
+    $("#thirst").draggable();
+  };
+  $("#health").draggable();
+  $("#armor").draggable();
+  $("#stamina").draggable();
+  $("#oxygen").draggable();
+  $("#id").draggable();
+  $("#time").draggable();
+  $("#microphone").draggable();
+  $("#drag-browser").draggable();
+} );
+
 // This code could be done better. However, I don't feel like re-writing this.
 window.addEventListener("message", function(event) {
   switch (event.data.action) {
