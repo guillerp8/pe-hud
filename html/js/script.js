@@ -1,6 +1,11 @@
+Config = {
+  useESX = false
+}
+
 // This code could be done better. However, I don't feel like re-writing this.
-window.addEventListener("message", function (event) {
+window.addEventListener("message", function(event) {
   switch (event.data.action) {
+
     case "show":
       $("#drag-browser").fadeIn();
     break;
@@ -11,13 +16,17 @@ window.addEventListener("message", function (event) {
 
     // Send Data
     case "hud":
-      progressCircle(event.data.health, ".health");
-      progressCircle(event.data.armor, ".armor");
-      progressCircle(event.data.stamina, ".stamina");
-      progressCircle(event.data.oxygen, ".oxygen");
-      progressCircle(event.data.players, ".id");
-      $("#idnumber").text(event.data.id)
-      $("#time").text(event.data.time)
+      if (Config.useESX) {
+        progressCircle(event.data.hunger, ".hunger");
+        progressCircle(event.data.thirst, ".thirst");
+      };
+        progressCircle(event.data.health, ".health");
+        progressCircle(event.data.armor, ".armor");
+        progressCircle(event.data.stamina, ".stamina");
+        progressCircle(event.data.oxygen, ".oxygen");
+        progressCircle(event.data.players, ".id");
+        $("#idnumber").text(event.data.id);
+        $("#time").text(event.data.time);
     break;
 
     case "microphone":
@@ -35,6 +44,14 @@ window.addEventListener("message", function (event) {
 
     case "staminaHide":
       $("#stamina").fadeOut();
+    break;
+
+    case "hungerHide":
+      $("#hunger").fadeOut();
+    break;
+
+    case "thirstHide":
+      $("#thirst").fadeOut();
     break;
 
     case "oxygenHide":
@@ -68,6 +85,14 @@ window.addEventListener("message", function (event) {
 
     case "staminaShow":
       $("#stamina").fadeIn();
+    break;
+
+    case "hungerShow":
+      $("#hunger").fadeIn();
+    break;
+
+    case "thirstShow":
+      $("#thirst").fadeIn();
     break;
 
     case "oxygenShow":
@@ -141,6 +166,14 @@ $(function () {
         $('#stamina-circle').css('stroke', color);
       break;
 
+      case "hunger-option":
+        $('#hunger-circle').css('stroke', color);
+      break;
+
+      case "thirst-option":
+        $('#thirst-circle').css('stroke', color);
+      break;
+
       case "oxygen-option":
         $('#oxygen-circle').css('stroke', color);
       break;
@@ -160,6 +193,11 @@ $(function () {
   });
 });
 
+// Click functions
+if (Config.useESX) {
+  $("#hunger-switch").click(function() {$.post('https://pe-hud/change', JSON.stringify({action: 'hunger'}));})
+  $("#thirst-switch").click(function() {$.post('https://pe-hud/change', JSON.stringify({action: 'thirst'}));})
+};
 $("#health-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'health' })); })
 $("#armor-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'armor' })); })
 $("#stamina-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'stamina' })); })
@@ -173,6 +211,10 @@ $("#close").click(function () { $.post('https://pe-hud/close') })
 $("#reset").click(function () { $("#drag-browser").animate({ top: "", left: "50%" }); })
 
 $("#reset-position").click(function () {
+  if (Config.useESX) {
+    $("#hunger").animate({top: "0px", left: "0px"});
+    $("#thirst").animate({top: "0px", left: "0px"});
+  };
   $("#health").animate({ top: "0px", left: "0px" });
   $("#armor").animate({ top: "0px", left: "0px" });
   $("#stamina").animate({ top: "0px", left: "0px" });
@@ -183,6 +225,10 @@ $("#reset-position").click(function () {
 });
 
 $("#reset-color").click(function () {
+  if (Config.useESX) {
+    $('#hunger-circle').css('stroke', '');
+    $('#thirst-circle').css('stroke', '');
+  };
   $('#health-circle').css('stroke', '');
   $('#armor-circle').css('stroke', '');
   $('#stamina-circle').css('stroke', '');
@@ -191,7 +237,7 @@ $("#reset-color").click(function () {
   $('#id-circle').css('stroke', '');
   $('#time').css('color', '');
 });
-
+// Color picker function
 $(function () {
   $('#color-block').on('colorchange', function () {
     let color = $(this).wheelColorPicker('value');
@@ -201,12 +247,13 @@ $(function () {
   });
 });
 
+// Exit function
 document.onkeyup = function (event) {
   if (event.key == 'Escape') {
     $.post('https://pe-hud/close');
   }
 };
-
+// Function for progress bars
 function progressCircle(percent, element) {
   const circle = document.querySelector(element);
   const radius = circle.r.baseVal.value;
