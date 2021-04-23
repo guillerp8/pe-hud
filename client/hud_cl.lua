@@ -7,7 +7,7 @@ local healthSwitch, shieldSwitch, hungerSwitch, thirstSwitch, stressSwitch, stam
 -- Variables
 
 local whisper, normal, shout = 33, 66, 100 
-local microphone = normal -- Change this for default
+local microphone = normal -- Change this for default (whisper, normal, shout)
 
 if Config.useESX then
     ESX              = nil
@@ -127,6 +127,16 @@ CreateThread(function()
 				staminaActive = true
 				SendNUIMessage({action = 'staminaHide'})
 			end
+			if Config.useESX then
+				if not hungerActive then
+					hungerActive = true
+					SendNUIMessage({action = 'hungerHide'})
+				end
+				if not thirstActive then
+					thirstActive = true
+					SendNUIMessage({action = 'thirstHide'})
+				end
+			end
 			if oxygenActive then
 				oxygenActive = false
 				SendNUIMessage({action = 'oxygenHide'})
@@ -160,6 +170,16 @@ CreateThread(function()
 			if staminaActive and not staminaSwitch then
 				staminaActive = false
 				SendNUIMessage({action = 'staminaShow'})
+			end
+			if Config.useESX then
+				if hungerActive and not hungerSwitch then
+					hungerActive = false
+					SendNUIMessage({action = 'hungerT'})
+				end
+				if thirstActive and not thirstSwitch then
+					thirstActive = false
+					SendNUIMessage({action = 'thirstT'})
+				end
 			end
 			if not oxygenActive and oxygenSwitch and showOxygen then
 				oxygenActive = true
@@ -195,6 +215,16 @@ CreateThread(function()
 				staminaActive = true
 				SendNUIMessage({action = 'staminaHide'})
 			end
+			if Config.useESX then
+				if not hungerActive then
+					hungerActive = true
+					SendNUIMessage({action = 'hungerHide'})
+				end
+				if not thirstActive then
+					thirstActive = true
+					SendNUIMessage({action = 'thirstHide'})
+				end
+			end
 			if oxygenActive then
 				oxygenActive = false
 				SendNUIMessage({action = 'oxygenHide'})
@@ -215,16 +245,31 @@ CreateThread(function()
 			SendNUIMessage({action = 'cinematicShow'})
 			isPaused = false
 		end
-		SendNUIMessage({
-			action = "hud",
-			health = health,
-			armor = armor,
-			stamina = stamina,
-			oxygen = oxygen,
-			id = id,
-			players = players,
-			time = hours .. " : " .. minutes
-		})
+		if Config.useESX then
+			SendNUIMessage({
+				action = "hud",
+				health = health,
+				armor = armor,
+				stamina = stamina,
+				hunger = hunger,
+				thirst = thirst,
+				oxygen = oxygen,
+				id = id,
+				players = players,
+				time = hours .. " : " .. minutes
+			})
+		else
+			SendNUIMessage({
+				action = "hud",
+				health = health,
+				armor = armor,
+				stamina = stamina,
+				oxygen = oxygen,
+				id = id,
+				players = players,
+				time = hours .. " : " .. minutes
+			})
+		end
 		Wait(420) -- Set to 100 so the hud is more fluid.
 	end
 end)
@@ -249,6 +294,29 @@ end)
 
 RegisterNetEvent('PE:change')
 AddEventHandler('PE:change', function(action)
+	if Config.useESX then
+		if action == "hunger" then
+			if not hungerActive then
+				hungerActive = true
+				hungerSwitch = true
+				SendNUIMessage({action = 'hungerHide'})
+			else
+				hungerActive = false
+				hungerSwitch = false
+				SendNUIMessage({action = 'hungerShow'})
+			end
+		elseif action == "thirst" then
+			if not thirstActive then
+				thirstActive = true
+				thirstSwitch = true
+				SendNUIMessage({action = 'thirstHide'})
+			else
+				thirstActive = false
+				thirstSwitch = false
+				SendNUIMessage({action = 'thirstShow'})
+			end
+		end
+	end
     if action == "health" then
 		if not healthActive then
 			healthActive = true
@@ -324,6 +392,16 @@ AddEventHandler('PE:change', function(action)
 				staminaActive = true
 				SendNUIMessage({action = 'staminaHide'})
 			end
+			if Config.useESX then
+				if not hungerActive then
+					hungerActive = true
+					SendNUIMessage({action = 'hungerHide'})
+				end
+				if not thirstActive then
+					thirstActive = true
+					SendNUIMessage({action = 'thirstHide'})
+				end
+			end
 			if oxygenActive then
 				oxygenActive = false
 				SendNUIMessage({action = 'oxygenHide'})
@@ -356,6 +434,16 @@ AddEventHandler('PE:change', function(action)
 			if staminaActive and not staminaSwitch then
 				staminaActive = false
 				SendNUIMessage({action = 'staminaShow'})
+			end
+			if Config.useESX then
+				if hungerActive and not hungerSwitch then
+					hungerActive = false
+					SendNUIMessage({action = 'hungerShow'})
+				end
+				if thirstActive and not thirstSwitch and not showArmor then
+					thirstActive = false
+					SendNUIMessage({action = 'thirstShow'})
+				end
 			end
 			if not oxygenActive and oxygenSwitch and showOxygen then
 				oxygenActive = true
@@ -401,6 +489,18 @@ AddEventHandler('PE:change', function(action)
 		end
     end
 end)
+
+if Config.useESX then
+	RegisterNetEvent("esx_status:onTick")
+	AddEventHandler("esx_status:onTick", function(status)
+		TriggerEvent('esx_status:getStatus', 'hunger', function(status)
+			hunger = status.val / 10000
+		end)
+		TriggerEvent('esx_status:getStatus', 'thirst', function(status)
+			thirst = status.val / 10000
+		end)
+	end)
+end
 
 -- Opening Menu
 RegisterCommand('hud', function()
