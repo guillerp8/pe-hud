@@ -16,4 +16,4 @@ Config.openKey      = 'f7'
 Config.oxygenMax    = 10 -- Set to 10 / 4 if using vMenu
 
 -- Variables (Framework)
-Config.useESX       = true
+Config.useESX       = false -- Change ESX config to true in ./html/js/config.lua and follow instructions
