@@ -1,6 +1,3 @@
-Config = {}
-Config.useESX = false // Set to true to use ESX
-
 // Set everything to be draggable
 $(function() {
   if (Config.useESX) {

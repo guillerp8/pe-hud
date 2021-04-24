@@ -174,11 +174,11 @@ CreateThread(function()
 			if Config.useESX then
 				if hungerActive and not hungerSwitch then
 					hungerActive = false
-					SendNUIMessage({action = 'hungerT'})
+					SendNUIMessage({action = 'hungerShow'})
 				end
 				if thirstActive and not thirstSwitch then
 					thirstActive = false
-					SendNUIMessage({action = 'thirstT'})
+					SendNUIMessage({action = 'thirstShow'})
 				end
 			end
 			if not oxygenActive and oxygenSwitch and showOxygen then
@@ -440,7 +440,7 @@ AddEventHandler('PE:change', function(action)
 					hungerActive = false
 					SendNUIMessage({action = 'hungerShow'})
 				end
-				if thirstActive and not thirstSwitch and not showArmor then
+				if thirstActive and not thirstSwitch then
 					thirstActive = false
 					SendNUIMessage({action = 'thirstShow'})
 				end
@@ -504,7 +504,7 @@ end
 
 -- Opening Menu
 RegisterCommand('hud', function()
-	if not isOpen then
+	if not isOpen and not isPaused then
 		isOpen = true
 		SendNUIMessage({ action = 'show' })
 		SetNuiFocus(true, true)
