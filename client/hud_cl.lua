@@ -26,10 +26,10 @@ CreateThread(function()
 	while true do
         local health 			= nil
 		local ped 				= PlayerPedId()
-		local pedId 			= PlayerId()
-		local oxygen 			= GetPlayerUnderwaterTimeRemaining(pedId) * Config.oxygenMax
-		local stamina 			= 100 - GetPlayerSprintStaminaRemaining(pedId)
-		local armor, id 		= GetPedArmour(ped), GetPlayerServerId(pedId)
+		local player 			= PlayerId()
+		local oxygen 			= GetPlayerUnderwaterTimeRemaining(player) * Config.oxygenMax
+		local stamina 			= 100 - GetPlayerSprintStaminaRemaining(player)
+		local armor, id 		= GetPedArmour(ped), GetPlayerServerId(player)
 		local minutes, hours 	= GetClockMinutes(), GetClockHours()
 		local players 			= #GetActivePlayers() * 100 / Config.maxPlayers
 
