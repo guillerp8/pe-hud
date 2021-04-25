@@ -25,6 +25,15 @@ window.addEventListener("message", function(event) {
       $("#drag-browser").fadeOut();
     break;
 
+    case "setColors":
+      $('#health-circle').css('stroke', event.data.healthColor);
+      $('#armor-circle').css('stroke', event.data.shieldColor);
+      $('#stamina-circle').css('stroke', event.data.staminaColor);
+      $('#oxygen-circle').css('stroke', event.data.oxygenColor);
+      $('#microphone-circle').css('stroke', event.data.microphoneColor);
+      $('#id-circle').css('stroke', event.data.idColor);
+    break;
+
     // Send Data
     case "hud":
       if (Config.useESX) {
