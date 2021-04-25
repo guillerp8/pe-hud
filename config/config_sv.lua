@@ -1,5 +1,5 @@
 Config = {
-    default = { -- These are the default locations to change the on screen div elements
+    default = { -- These are the default values. RGBA should work based on testing
         healthColor = '#9DE112',
         shieldColor = '#3585DA',
         staminaColor = '#FFC100',
