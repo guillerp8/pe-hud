@@ -541,27 +541,3 @@ RegisterKeyMapping('+levelVoice', 'Adjust Voice Range', 'keyboard', Config.voice
 AddEventHandler('playerSpawned', function()
 	DisplayRadar(false)
 end)
-
-RegisterNetEvent('PE:setColors')
-local colors = { -- Default HTML settings
-	healthColor = '#9DE112',
-	shieldColor = '#3585DA',
-	staminaColor = '#FFC100',
-	oxygenColor = '#A636ED',
-	timeColor = '#CCC',
-	microphoneColor = '#ff6f00',
-	idColor = '#FF0046'
-}
-AddEventHandler('PE:setColors', function(data)
-	colors = data
-	SendNUIMessage({
-		action = 'setColors',
-		healthColor = colors.healthColor,
-		shieldColor = colors.shieldColor,
-		staminaColor = colors.staminaColor,
-		oxygenColor = colors.oxygenColor,
-		timeColor = colors.timeColor,
-		microphoneColor = colors.microphoneColor,
-		idColor = colors.idColor
-	})
-end)

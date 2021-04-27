@@ -270,6 +270,12 @@ $("#microphone-switch").click(function () { $.post('https://pe-hud/change', JSON
 $("#close").click(function () { $.post('https://pe-hud/close') })
 $("#reset").click(function () { $("#drag-browser").animate({ top: "", left: "50%" }); })
 
+$("#close").click(function () {
+  let healthColor = $('#health-circle').css('stroke')
+   $.post('https://pe-hud/saveColors', JSON.stringify({ data: "#ccc" }));
+  console.log(healthColor)
+});
+
 $("#reset-position").click(function () {
   if (Config.useESX) {
     $("#hunger").animate({top: "0px", left: "0px"});
