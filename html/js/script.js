@@ -7,51 +7,46 @@ $(function() {
   $('#health').draggable({
     drag: function(event, ui){
       dragpositionHealth = ui.position;
-      console.log(dragpositionHealth);
+      console.log($("#health").offset());
     }
   });
   $("#armor").draggable({
     drag: function(event, ui){
-      dragpositionHealth = ui.position;
-      console.log(dragpositionHealth);
+      dragpositionArmor = ui.position;
+      console.log(dragpositionArmor);
     }
   });
   $("#stamina").draggable({
     drag: function(event, ui){
-      dragpositionHealth = ui.position;
-      console.log(dragpositionHealth);
+      dragpositionStamina = ui.position;
+      console.log(dragpositionStamina);
     }
   });
   $("#oxygen").draggable({
     drag: function(event, ui){
-      dragpositionHealth = ui.position;
-      console.log(dragpositionHealth);
+      dragpositionOxygen = ui.position;
+      console.log(dragpositionOxygen);
     }
   });
   $("#id").draggable({
     drag: function(event, ui){
-      dragpositionHealth = ui.position;
-      console.log(dragpositionHealth);
+      dragpositionId = ui.position;
+      console.log(dragpositionId);
     }
   });
   $("#time").draggable({
     drag: function(event, ui){
-      dragpositionHealth = ui.position;
-      console.log(dragpositionHealth);
+      dragpositionTime = ui.position;
+      console.log(dragpositionTime);
     }
   });
   $("#microphone").draggable({
     drag: function(event, ui){
-      dragpositionHealth = ui.position;
-      console.log(dragpositionHealth);
+      dragpositionMicrophone = ui.position;
+      console.log(dragpositionMicrophone);
     }
   });
-  $("#drag-browser").draggable({
-    drag: function(event, ui){
-      dragpositionHealth = ui.position;
-      console.log(dragpositionHealth);
-    }
-  });
+  $("#drag-browser").draggable();
 } );
 
 // Switches & Cases
