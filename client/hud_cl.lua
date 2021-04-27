@@ -541,3 +541,23 @@ RegisterKeyMapping('+levelVoice', 'Adjust Voice Range', 'keyboard', Config.voice
 AddEventHandler('playerSpawned', function()
 	DisplayRadar(false)
 end)
+
+RegisterNUICallback('saveInfo', function(data)
+	print(data)
+end)
+
+
+RegisterNetEvent('PE:setData')
+AddEventHandler('PE:setData', function(data)
+	colors = data
+	SendNUIMessage({
+		action = 'setColors',
+		healthColor = colors.healthColor,
+		shieldColor = colors.shieldColor,
+		staminaColor = colors.staminaColor,
+		oxygenColor = colors.oxygenColor,
+		timeColor = colors.timeColor,
+		microphoneColor = colors.microphoneColor,
+		idColor = colors.idColor
+	})
+end)

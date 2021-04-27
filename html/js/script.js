@@ -216,6 +216,7 @@ $(function () {
     switch ($("#selection").val()) {
       case "health-option":
         $('#health-circle').css('stroke', color);
+        $.post('https://pe-hud/saveInfo', JSON.stringify({ data: color }))
       break;
 
       case "shield-option":
