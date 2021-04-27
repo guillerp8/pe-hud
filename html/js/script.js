@@ -4,14 +4,54 @@ $(function() {
     $("#hunger").draggable();
     $("#thirst").draggable();
   };
-  $("#health").draggable();
-  $("#armor").draggable();
-  $("#stamina").draggable();
-  $("#oxygen").draggable();
-  $("#id").draggable();
-  $("#time").draggable();
-  $("#microphone").draggable();
-  $("#drag-browser").draggable();
+  $('#health').draggable({
+    drag: function(event, ui){
+      dragpositionHealth = ui.position;
+      console.log(dragpositionHealth);
+    }
+  });
+  $("#armor").draggable({
+    drag: function(event, ui){
+      dragpositionHealth = ui.position;
+      console.log(dragpositionHealth);
+    }
+  });
+  $("#stamina").draggable({
+    drag: function(event, ui){
+      dragpositionHealth = ui.position;
+      console.log(dragpositionHealth);
+    }
+  });
+  $("#oxygen").draggable({
+    drag: function(event, ui){
+      dragpositionHealth = ui.position;
+      console.log(dragpositionHealth);
+    }
+  });
+  $("#id").draggable({
+    drag: function(event, ui){
+      dragpositionHealth = ui.position;
+      console.log(dragpositionHealth);
+    }
+  });
+  $("#time").draggable({
+    drag: function(event, ui){
+      dragpositionHealth = ui.position;
+      console.log(dragpositionHealth);
+    }
+  });
+  $("#microphone").draggable({
+    drag: function(event, ui){
+      dragpositionHealth = ui.position;
+      console.log(dragpositionHealth);
+    }
+  });
+  $("#drag-browser").draggable({
+    drag: function(event, ui){
+      dragpositionHealth = ui.position;
+      console.log(dragpositionHealth);
+    }
+  });
 } );
 
 // Switches & Cases

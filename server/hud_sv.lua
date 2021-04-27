@@ -42,4 +42,5 @@ end
 -- Handler
 AddEventHandler('onResourceStart', function()
     players = json.decode(loadFile) or {}
+    print("[^6WC^7] [^2INFO^7] Started resource! \n[^6WC^7] [^2INFO^7] Current Players: ^2" .. #GetPlayers())
 end)
