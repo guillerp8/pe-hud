@@ -7,7 +7,7 @@ $(function() {
   $('#health').draggable({
     drag: function(event, ui){
       dragpositionHealth = ui.position;
-      console.log($("#health").offset());
+      console.log(dragpositionHealth);
     }
   });
   $("#armor").draggable({
@@ -47,6 +47,10 @@ $(function() {
     }
   });
   $("#drag-browser").draggable();
+
+  $("#close").click(function () {
+    $("#health").animate({top: "-400", left: "-200"});
+  })
 } );
 
 // Switches & Cases
