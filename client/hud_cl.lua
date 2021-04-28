@@ -555,9 +555,11 @@ if Config.useESX then
 		TriggerEvent('esx_status:getStatus', 'thirst', function(status)
 			thirst = status.val / 10000
 		end)
-		TriggerEvent('esx_status:getStatus', 'stress', function(status)
-			stress = status.val / 10000
-		end)
+		if Config.useStress then
+			TriggerEvent('esx_status:getStatus', 'stress', function(status)
+				stress = status.val / 10000
+			end)
+		end
 	end)
 end
 
