@@ -11,7 +11,7 @@ This project does not contain a license, therefore you are not allowed to add on
  - Hide when paused
  - Save colors and position
  - Multiple options like cinematic bars and hide map
- - Config for ESX and [Stress](https://github.com/utkuali/Stress-System-by-utku)
+ - Config for ESX and [Stress](https://github.com/utkuali/Stress-System-by-utku) (config.lua and config.js)
 
 # Video/Screenshot
 [![Watch the video](https://imgur.com/a/zvRMjZl.png)](https://streamable.com/xtfytg)
