@@ -1,55 +1,83 @@
 // Set everything to be draggable
 $(function() {
   if (Config.useESX) {
-    $("#hunger").draggable();
-    $("#thirst").draggable();
+    $('#hunger').draggable({
+      drag: function(event, ui){
+        dragpositionHungerTop = ui.position.top;
+        dragpositionHungerLeft = ui.position.left;
+        localStorage.setItem("hungerTop", dragpositionHungerTop);
+        localStorage.setItem("hungerLeft", dragpositionHungerLeft);
+      }
+    });
+    $('#thirst').draggable({
+      drag: function(event, ui){
+        dragpositionThirstTop = ui.position.top;
+        dragpositionThirstLeft = ui.position.left;
+        localStorage.setItem("thirstTop", dragpositionThirstTop);
+        localStorage.setItem("thirstLeft", dragpositionThirstLeft);
+      }
+    });
+    if (Config.useStress) {
+      $('#stress').draggable({
+        drag: function(event, ui){
+          dragpositionStressTop = ui.position.top;
+          dragpositionStressLeft = ui.position.left;
+          localStorage.setItem("stressTop", dragpositionHungerTop);
+          localStorage.setItem("stressLeft", dragpositionStressLeft);
+        }
+      });
+    };
   };
   $('#health').draggable({
     drag: function(event, ui){
-      dragpositionHealth = ui.position;
-      console.log(dragpositionHealth);
+      dragpositionHealthTop = ui.position.top;
+      dragpositionHealthLeft = ui.position.left;
+      localStorage.setItem("healthTop", dragpositionHealthTop);
+      localStorage.setItem("healthLeft", dragpositionHealthLeft);
     }
   });
   $("#armor").draggable({
     drag: function(event, ui){
-      dragpositionArmor = ui.position;
-      console.log(dragpositionArmor);
+      dragpositionArmorTop = ui.position.top;
+      dragpositionArmorLeft = ui.position.left;
+      localStorage.setItem("armorTop", dragpositionArmorTop);
+      localStorage.setItem("armorLeft", dragpositionArmorLeft);
     }
   });
   $("#stamina").draggable({
     drag: function(event, ui){
-      dragpositionStamina = ui.position;
-      console.log(dragpositionStamina);
+      dragpositionStaminaTop = ui.position.top;
+      dragpositionStaminaLeft = ui.position.left;
+      localStorage.setItem("staminaTop", dragpositionStaminaTop);
+      localStorage.setItem("staminaLeft", dragpositionStaminaLeft);
     }
   });
   $("#oxygen").draggable({
     drag: function(event, ui){
-      dragpositionOxygen = ui.position;
-      console.log(dragpositionOxygen);
+      dragpositionOxygenTop = ui.position.top;
+      dragpositionOxygenLeft = ui.position.left;
+      localStorage.setItem("oxygenTop", dragpositionOxygenTop);
+      localStorage.setItem("oxygenLeft", dragpositionOxygenLeft);
     }
   });
   $("#id").draggable({
     drag: function(event, ui){
-      dragpositionId = ui.position;
-      console.log(dragpositionId);
-    }
-  });
-  $("#time").draggable({
-    drag: function(event, ui){
-      dragpositionTime = ui.position;
-      console.log(dragpositionTime);
+      dragpositionIdTop = ui.position.top;
+      dragpositionIdLeft = ui.position.left;
+      localStorage.setItem("idTop", dragpositionIdTop);
+      localStorage.setItem("idLeft", dragpositionIdLeft);
     }
   });
   $("#microphone").draggable({
     drag: function(event, ui){
-      dragpositionMicrophone = ui.position;
-      console.log(dragpositionMicrophone);
+      dragpositionMicrophoneTop = ui.position.top;
+      dragpositionMicrophoneLeft = ui.position.left;
+      localStorage.setItem("microphoneTop", dragpositionMicrophoneTop);
+      localStorage.setItem("microphoneLeft", dragpositionMicrophoneLeft);
     }
   });
   $("#drag-browser").draggable();
-
-
-} );
+});
 
 // Switches & Cases
 window.addEventListener("message", function(event) {
@@ -63,12 +91,35 @@ window.addEventListener("message", function(event) {
     break;
 
     case "setColors":
-      $('#health-circle').css('stroke', event.data.healthColor);
-      $('#armor-circle').css('stroke', event.data.shieldColor);
-      $('#stamina-circle').css('stroke', event.data.staminaColor);
-      $('#oxygen-circle').css('stroke', event.data.oxygenColor);
-      $('#microphone-circle').css('stroke', event.data.microphoneColor);
-      $('#id-circle').css('stroke', event.data.idColor);
+      if (Config.useESX) {
+        $('#hunger-circle').css('stroke', localStorage.getItem("hungerColor"));
+        $('#thirst-circle').css('stroke', localStorage.getItem("thirstColor"));
+        if (Config.useStress) {
+          $("#stress-circle").css('stroke', localStorage.getItem("stressColor"));
+        };
+      };
+      $('#health-circle').css('stroke', localStorage.getItem("healthColor"));
+      $('#armor-circle').css('stroke', localStorage.getItem("armorColor"));
+      $('#stamina-circle').css('stroke', localStorage.getItem("staminaColor"));
+      $('#oxygen-circle').css('stroke', localStorage.getItem("oxygenColor"));
+      $('#id-circle').css('stroke', localStorage.getItem("idColor"));
+      $('#microphone-circle').css('stroke', localStorage.getItem("microphoneColor"));
+    break;
+
+    case "setPosition":
+      if (Config.useESX) {
+        $("#hunger").animate({ top: localStorage.getItem("hungerTop"), left: localStorage.getItem("hungerLeft") });
+        $("#thirst").animate({ top: localStorage.getItem("thirstTop"), left: localStorage.getItem("thirstLeft") });
+        if (Config.useStress) {
+          $("#stress").animate({ top: localStorage.getItem("stressTop"), left: localStorage.getItem("stressLeft") });
+        };
+      };
+      $("#health").animate({ top: localStorage.getItem("healthTop"), left: localStorage.getItem("healthLeft") });
+      $("#armor").animate({ top: localStorage.getItem("armorTop"), left: localStorage.getItem("armorLeft") });
+      $("#stamina").animate({ top: localStorage.getItem("staminaTop"), left: localStorage.getItem("staminaLeft") });
+      $("#oxygen").animate({ top: localStorage.getItem("oxygenTop"), left: localStorage.getItem("oxygenLeft") });
+      $("#microphone").animate({ top: localStorage.getItem("microphoneTop"), left: localStorage.getItem("microphoneLeft") });
+      $("#id").animate({ top: localStorage.getItem("idTop"), left: localStorage.getItem("idLeft") });
     break;
 
     // Send Data
@@ -76,6 +127,9 @@ window.addEventListener("message", function(event) {
       if (Config.useESX) {
         progressCircle(event.data.hunger, ".hunger");
         progressCircle(event.data.thirst, ".thirst");
+        if (Config.useStress) {
+          progressCircle(event.data.stress, ".stress");
+        };
       };
         progressCircle(event.data.health, ".health");
         progressCircle(event.data.armor, ".armor");
@@ -109,6 +163,10 @@ window.addEventListener("message", function(event) {
 
     case "thirstHide":
       $("#thirst").fadeOut();
+    break;
+
+    case "stressHide":
+      $("#stress").fadeOut();
     break;
 
     case "oxygenHide":
@@ -150,6 +208,10 @@ window.addEventListener("message", function(event) {
 
     case "thirstShow":
       $("#thirst").fadeIn();
+    break;
+    
+    case "stressHide":
+      $("#stress").fadeOut();
     break;
 
     case "oxygenShow":
@@ -213,35 +275,48 @@ $(function () {
     switch ($("#selection").val()) {
       case "health-option":
         $('#health-circle').css('stroke', color);
-        $.post('https://pe-hud/saveInfo', JSON.stringify({ data: color }))
+        localStorage.setItem("healthColor", color);
+        print(color)
       break;
 
-      case "shield-option":
+      case "armor-option":
         $('#armor-circle').css('stroke', color);
+        localStorage.setItem("armorColor", color);
       break;
 
       case "stamina-option":
         $('#stamina-circle').css('stroke', color);
+        localStorage.setItem("staminaColor", color);
       break;
 
       case "hunger-option":
         $('#hunger-circle').css('stroke', color);
+        localStorage.setItem("hungerColor", color);
       break;
 
       case "thirst-option":
         $('#thirst-circle').css('stroke', color);
+        localStorage.setItem("thirstColor", color);
+      break;
+
+      case "stress-option":
+        $('#stress-circle').css('stroke', color);
+        localStorage.setItem("stressColor", color);
       break;
 
       case "oxygen-option":
         $('#oxygen-circle').css('stroke', color);
+        localStorage.setItem("oxygenColor", color);
       break;
 
       case "microphone-option":
         $('#microphone-circle').css('stroke', color);
+        localStorage.setItem("microphoneColor", color);
       break;
 
       case "id-option":
         $('#id-circle').css('stroke', color);
+        localStorage.setItem("idColor", color);
       break;
 
       case "time-option":
@@ -253,25 +328,31 @@ $(function () {
 
 // Click functions
 if (Config.useESX) {
-  $("#hunger-switch").click(function() {$.post('https://pe-hud/change', JSON.stringify({action: 'hunger'}));})
-  $("#thirst-switch").click(function() {$.post('https://pe-hud/change', JSON.stringify({action: 'thirst'}));})
+  $("#hunger-switch").click(function() {$.post('https://pe-hud/change', JSON.stringify({action: 'hunger'}));});
+  $("#thirst-switch").click(function() {$.post('https://pe-hud/change', JSON.stringify({action: 'thirst'}));});
+  if (Config.useStress) {
+    $("#stress-switch").click(function() {$.post('https://pe-hud/change', JSON.stringify({action: 'stress'}));});
+  };
 };
-$("#health-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'health' })); })
-$("#armor-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'armor' })); })
-$("#stamina-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'stamina' })); })
-$("#oxygen-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'oxygen' })) })
-$("#map-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'map' })) })
-$("#id-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'id' })) })
-$("#cinematic-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'cinematic' })) })
-$("#time-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'time' })) })
-$("#microphone-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'microphone' })) })
-$("#close").click(function () { $.post('https://pe-hud/close') })
-$("#reset").click(function () { $("#drag-browser").animate({ top: "", left: "50%" }); })
+$("#health-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'health' })); });
+$("#armor-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'armor' })); });
+$("#stamina-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'stamina' })); });
+$("#oxygen-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'oxygen' })) });
+$("#map-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'map' })) });
+$("#id-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'id' })) });
+$("#cinematic-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'cinematic' })) });
+$("#time-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'time' })) });
+$("#microphone-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'microphone' })) });
+$("#reset").click(function () { $("#drag-browser").animate({ top: "", left: "50%" }); });
+$("#close").click(function () { $.post('https://pe-hud/close');});
 
 $("#reset-position").click(function () {
   if (Config.useESX) {
     $("#hunger").animate({top: "0px", left: "0px"});
     $("#thirst").animate({top: "0px", left: "0px"});
+    if (Config.useStress) {
+      $("#stress").animate({top: "0px", left: "0px"});
+    };
   };
   $("#health").animate({ top: "0px", left: "0px" });
   $("#armor").animate({ top: "0px", left: "0px" });
@@ -286,6 +367,9 @@ $("#reset-color").click(function () {
   if (Config.useESX) {
     $('#hunger-circle').css('stroke', '');
     $('#thirst-circle').css('stroke', '');
+    if (Config.useStress) {
+      $('#stress-circle').css('stroke', '');
+    };
   };
   $('#health-circle').css('stroke', '');
   $('#armor-circle').css('stroke', '');
@@ -304,6 +388,11 @@ $(function () {
     $('.color-preview-alpha').text(Math.round(alpha * 100) + '%');
   });
 });
+
+// Just for print values easier
+function print(value) {
+  console.log(value)
+}
 
 // Exit function
 document.onkeyup = function (event) {

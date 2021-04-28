@@ -50,6 +50,11 @@
         <circle class="progressplayer thirst" id="thirst-circle" stroke="#00b6e3" stroke-width="4.5" style="stroke-opacity: 1.0" fill="#000000" r="20" cx="24" cy="24" stroke-dasharray="70 30" stroke-dashoffset="0"/>
         <image href="img/thirst.png" height="17" width="17" x="16" y="27"></image>
       </svg>
+
+      <svg class="circle" id="stress" width="60" height="60">
+        <circle class="progressplayer stress" id="stress-circle" stroke="#00b6e3" stroke-width="4.5" style="stroke-opacity: 1.0" fill="#000000" r="20" cx="24" cy="24" stroke-dasharray="70 30" stroke-dashoffset="0"/>
+        <image href="img/stress.png" height="17" width="17" x="16" y="27"></image>
+      </svg>
     -->
 
       <svg class="circle" id="stamina" width="60" height="60">
@@ -167,6 +172,13 @@
               <label class="switch buttoncenter3" >
                 <input type="checkbox" id="thirst-switch" checked>
                 <span class="slider round"></span>
+              </label>
+
+              <image src="./img/stress.png" alt="Image did not load correctly">
+
+              <label class="switch buttoncenter3" >
+                <input type="checkbox" id="stress-switch" checked>
+                <span class="slider round"></span>
               </label> 
             </div>
             -->
@@ -178,9 +190,10 @@
             <div class="footer-center">
               <select id="selection">
                 <option class="options" value="health-option" selected>Health</option>
-                <option class="options" value="shield-option">Shield</option>
+                <option class="options" value="armor-option">Armor</option>
                 <!--<option class="options" value="hunger-option">Hunger</option>
-                <option class="options" value="thirst-option">Thirst</option>-->
+                <option class="options" value="thirst-option">Thirst</option>
+              <option class="options" value="thirst-option">Stress</option>-->
                 <option class="options" value="stamina-option">Stamina</option>
                 <option class="options" value="oxygen-option">Oxygen</option>
                 <option class="options" value="microphone-option">Microphone</option>

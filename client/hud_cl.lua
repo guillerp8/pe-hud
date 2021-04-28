@@ -1,11 +1,10 @@
 -- Optimizations
 local showMap, showBars, showArmor, showOxygen, isOpen, cinematicHud, isPaused
-local pulseHealth, pulseShield, pulseStamina, pulseOxygen
-local healthActive, shieldActive, hungerActive, thirstActive, stressActive, staminaActive, oxygenActive, microphoneActive, timeActive, cinematicActive, idActive
-local healthSwitch, shieldSwitch, hungerSwitch, thirstSwitch, stressSwitch, staminaSwitch, oxygenSwitch, microphoneSwitch, timeSwitch, cinematicSwitch, idSwitch
+local pulseHealth, pulseArmor, pulseStamina, pulseOxygen
+local healthActive, armorActive, hungerActive, thirstActive, stressActive, staminaActive, oxygenActive, microphoneActive, timeActive, cinematicActive, idActive
+local healthSwitch, armorSwitch, hungerSwitch, thirstSwitch, stressSwitch, staminaSwitch, oxygenSwitch, microphoneSwitch, timeSwitch, cinematicSwitch, idSwitch
 
 -- Variables
-
 local whisper, normal, shout = 33, 66, 100 
 local microphone = normal -- Change this for default (whisper, normal, shout)
 
@@ -50,18 +49,18 @@ CreateThread(function()
 		
 		if Config.hideArmor and not cinematicHud and not isPaused then
 			if (armor <= 0) then
-				if not shieldSwitch then
+				if not armorSwitch then
 					SendNUIMessage({action = 'armorHide'})
-					shieldActive = true
+					armorActive = true
 					showArmor = true
 				else
 					SendNUIMessage({action = 'armorShow'})
-					shieldActive = false
+					armorActive = false
 					showArmor = false
 				end
-			elseif not shieldSwitch then
+			elseif not armorSwitch then
 				SendNUIMessage({action = 'armorShow'})
-				shieldActive = false
+				armorActive = false
 				showArmor = false
 			end
 		end
@@ -87,13 +86,13 @@ CreateThread(function()
 				pulseHealth = false
 			end
 			if (armor <= Config.pulseStart) and not (armor == 0) then
-				if not pulseShield then
+				if not pulseArmor then
 					SendNUIMessage({action = 'armorStart'})
-					pulseShield = true
+					pulseArmor = true
 				end
-			elseif (armor > Config.pulseStart) and pulseShield then
+			elseif (armor > Config.pulseStart) and pulseArmor then
 				SendNUIMessage({action = 'armorStop'})
-				pulseShield = false
+				pulseArmor = false
 			end
 			if (stamina <= Config.pulseStart) then 
 				if not pulseStamina then
@@ -119,8 +118,8 @@ CreateThread(function()
 				healthActive = true
 				SendNUIMessage({action = 'healthHide'})
 			end
-			if not shieldActive then
-				shieldActive = true
+			if not armorActive then
+				armorActive = true
 				SendNUIMessage({action = 'armorHide'})
 			end
 			if not staminaActive then
@@ -135,6 +134,12 @@ CreateThread(function()
 				if not thirstActive then
 					thirstActive = true
 					SendNUIMessage({action = 'thirstHide'})
+				end
+				if Config.useStress then
+					if not stressActive then
+						stressActive = true
+						SendNUIMessage({action = 'stressHide'})
+					end
 				end
 			end
 			if oxygenActive then
@@ -163,8 +168,8 @@ CreateThread(function()
 				healthActive = false
 				SendNUIMessage({action = 'healthShow'})
 			end
-			if shieldActive and not shieldSwitch and not showArmor then
-				shieldActive = false
+			if armorActive and not armorSwitch and not showArmor then
+				armorActive = false
 				SendNUIMessage({action = 'armorShow'})
 			end
 			if staminaActive and not staminaSwitch then
@@ -179,6 +184,12 @@ CreateThread(function()
 				if thirstActive and not thirstSwitch then
 					thirstActive = false
 					SendNUIMessage({action = 'thirstShow'})
+				end
+				if Config.useStress then
+					if stressActive and not stressSwitch then
+						stressActive = false
+						SendNUIMessage({action = 'stressShow'})
+					end
 				end
 			end
 			if not oxygenActive and oxygenSwitch and showOxygen then
@@ -207,8 +218,8 @@ CreateThread(function()
 				healthActive = true
 				SendNUIMessage({action = 'healthHide'})
 			end
-			if not shieldActive then
-				shieldActive = true
+			if not armorActive then
+				armorActive = true
 				SendNUIMessage({action = 'armorHide'})
 			end
 			if not staminaActive then
@@ -223,6 +234,12 @@ CreateThread(function()
 				if not thirstActive then
 					thirstActive = true
 					SendNUIMessage({action = 'thirstHide'})
+				end
+				if Config.useStress then
+					if not stressActive then
+						stressActive = true
+						SendNUIMessage({action = 'stressHide'})
+					end
 				end
 			end
 			if oxygenActive then
@@ -248,11 +265,20 @@ CreateThread(function()
 		if Config.useESX then
 			SendNUIMessage({
 				action = "hud",
+				stamina = stamina,
+				hunger = hunger
+			})
+			if Config.useStress then
+				SendNUIMessage({
+					action = "hud",
+					stress = stress
+				})
+			end
+			SendNUIMessage({
+				action = "hud",
 				health = health,
 				armor = armor,
 				stamina = stamina,
-				hunger = hunger,
-				thirst = thirst,
 				oxygen = oxygen,
 				id = id,
 				players = players,
@@ -316,6 +342,17 @@ AddEventHandler('PE:change', function(action)
 				SendNUIMessage({action = 'thirstShow'})
 			end
 		end
+		if Config.useStress then
+			if not stressActive then
+				stressActive = true
+				stressSwitch = true
+				SendNUIMessage({action = 'stressHide'})
+			else
+				stressActive = false
+				stressSwitch = false
+				SendNUIMessage({action = 'stressShow'})
+			end
+		end
 	end
     if action == "health" then
 		if not healthActive then
@@ -328,13 +365,13 @@ AddEventHandler('PE:change', function(action)
 			SendNUIMessage({action = 'healthShow'})
 		end
     elseif action == "armor" then
-		if not shieldActive then
-			shieldActive = true
-			shieldSwitch = true
+		if not armorActive then
+			armorActive = true
+			armorSwitch = true
 			SendNUIMessage({action = 'armorHide'})
 		else
-			shieldActive = false
-			shieldSwitch = false
+			armorActive = false
+			armorSwitch = false
 			SendNUIMessage({action = 'armorShow'})
 		end
     elseif action == "stamina" then
@@ -384,8 +421,8 @@ AddEventHandler('PE:change', function(action)
 				healthActive = true
 				SendNUIMessage({action = 'healthHide'})
 			end
-			if not shieldActive then
-				shieldActive = true
+			if not armorActive then
+				armorActive = true
 				SendNUIMessage({action = 'armorHide'})
 			end
 			if not staminaActive then
@@ -400,6 +437,12 @@ AddEventHandler('PE:change', function(action)
 				if not thirstActive then
 					thirstActive = true
 					SendNUIMessage({action = 'thirstHide'})
+				end
+				if Config.useStress then
+					if not stressActive then
+						stressActive = true
+						SendNUIMessage({action = 'stressHide'})
+					end
 				end
 			end
 			if oxygenActive then
@@ -427,8 +470,8 @@ AddEventHandler('PE:change', function(action)
 				healthActive = false
 				SendNUIMessage({action = 'healthShow'})
 			end
-			if shieldActive and not shieldSwitch and not showArmor then
-				shieldActive = false
+			if armorActive and not armorSwitch and not showArmor then
+				armorActive = false
 				SendNUIMessage({action = 'armorShow'})
 			end
 			if staminaActive and not staminaSwitch then
@@ -443,6 +486,12 @@ AddEventHandler('PE:change', function(action)
 				if thirstActive and not thirstSwitch then
 					thirstActive = false
 					SendNUIMessage({action = 'thirstShow'})
+				end
+				if Config.useStress then
+					if stressActive and not stressSwitch then
+						stressActive = false
+						SendNUIMessage({action = 'stressShow'})
+					end
 				end
 			end
 			if not oxygenActive and oxygenSwitch and showOxygen then
@@ -503,6 +552,14 @@ if Config.useESX then
 end
 
 -- Opening Menu
+RegisterCommand('getPos', function()
+	SendNUIMessage({ action = 'setPosition' })
+end)
+
+RegisterCommand('getColor', function()
+	SendNUIMessage({ action = 'setColors' })
+end)
+
 RegisterCommand('hud', function()
 	if not isOpen and not isPaused then
 		isOpen = true
@@ -540,8 +597,7 @@ RegisterKeyMapping('+levelVoice', 'Adjust Voice Range', 'keyboard', Config.voice
 -- Handler
 AddEventHandler('playerSpawned', function()
 	DisplayRadar(false)
-end)
-
-RegisterNUICallback('saveInfo', function(data)
-	print(data)
+	Wait(5000)
+	SendNUIMessage({ action = 'setPosition' })
+	SendNUIMessage({ action = 'setColors' })
 end)
