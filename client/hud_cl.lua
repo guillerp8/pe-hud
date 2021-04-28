@@ -1,23 +1,41 @@
-local showMap, showBars, showArmor, showOxygen, isOpen, movieHud, isPaused
-local beepHealth, beepShield, beepStamina, beepOxygen
-local healthActive, shieldActive, staminaActive, oxygenActive, microphoneActive, timeActive, movieActive, idActive
-local healthSwitch, shieldSwitch, staminaSwitch, oxygenSwitch, microphoneSwitch, timeSwitch, movieSwitch, idSwitch
-local whisper, normal, scream = 33, 66, 100 
-local microphone = normal -- Change this for default
+-- Optimizations
+local showMap, showBars, showArmor, showOxygen, isOpen, cinematicHud, isPaused
+local pulseHealth, pulseArmor, pulseStamina, pulseOxygen
+local healthActive, armorActive, hungerActive, thirstActive, stressActive, staminaActive, oxygenActive, microphoneActive, timeActive, cinematicActive, idActive
+local healthSwitch, armorSwitch, hungerSwitch, thirstSwitch, stressSwitch, staminaSwitch, oxygenSwitch, microphoneSwitch, timeSwitch, cinematicSwitch, idSwitch
+
+-- Variables
+local whisper, normal, shout = 33, 66, 100 
+local microphone = normal -- Change this for default (whisper, normal, shout)
+
+if Config.useESX then
+    ESX              = nil
+    local PlayerData = {}
+
+    CreateThread(function()
+        while ESX == nil do
+            TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+            Wait(250)
+        end
+    end)
+end
 
 -- Main Thread
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
-        local health = nil
-		local oxygen = 10 * GetPlayerUnderwaterTimeRemaining(PlayerId())
-		local stamina = 100 - GetPlayerSprintStaminaRemaining(PlayerId())
-		local armor, id = GetPedArmour(PlayerPedId()), GetPlayerServerId(PlayerId())
-		local minutes, hours =  GetClockMinutes(), GetClockHours()
-		local players = #GetActivePlayers() * 100 / Config.MaxPlayers
-		if IsEntityDead(PlayerPedId()) then
+        local health 			= nil
+		local ped 				= PlayerPedId()
+		local player 			= PlayerId()
+		local oxygen 			= GetPlayerUnderwaterTimeRemaining(player) * Config.oxygenMax
+		local stamina 			= 100 - GetPlayerSprintStaminaRemaining(player)
+		local armor, id 		= GetPedArmour(ped), GetPlayerServerId(player)
+		local minutes, hours 	= GetClockMinutes(), GetClockHours()
+		local players 			= #GetActivePlayers() * 100 / Config.maxPlayers
+
+		if IsEntityDead(ped) then
 			health = 0
 		else
-			health = GetEntityHealth(PlayerPedId()) - 100
+			health = GetEntityHealth(ped) - 100
 		end
 		if (oxygen <= 0) then
 			oxygen = 0
@@ -28,56 +46,71 @@ Citizen.CreateThread(function()
 		if (hours <= 9) then
 			hours = "0" .. hours
 		end
-		if Config.ShowArmour then
-			if (armor <= 0) and not isPaused and not shieldSwitch and not movieHud then
+		
+		if Config.hideArmor and not cinematicHud and not isPaused then
+			if (armor <= 0) then
+				if not armorSwitch then
 					SendNUIMessage({action = 'armorHide'})
-					shieldActive = true
+					armorActive = true
 					showArmor = true
-			elseif (armor >= 1) and shieldActive and not shieldSwitch and not isPaused and not movieHud then
-				SendNUIMessage({action = 'armorT'})
-				shieldActive = false
+				else
+					SendNUIMessage({action = 'armorShow'})
+					armorActive = false
+					showArmor = false
+				end
+			elseif not armorSwitch then
+				SendNUIMessage({action = 'armorShow'})
+				armorActive = false
 				showArmor = false
 			end
 		end
-		if Config.ShowOxygen then
-			if IsEntityInWater(PlayerPedId()) and not isPaused and oxygenSwitch and not movieHud then
-					SendNUIMessage({action = 'oxygenT'})
-					oxygenActive = true
-					showOxygen = true
-			elseif not IsEntityInWater(PlayerPedId()) and oxygenActive and oxygenSwitch and not isPaused and not movieHud then
+		if Config.hideOxygen and not cinematicHud and not isPaused then
+			if IsEntityInWater(ped) then
+				SendNUIMessage({action = 'oxygenShow'})
+				oxygenActive = true
+				showOxygen = true
+			else
 				SendNUIMessage({action = 'oxygenHide'})
 				oxygenActive = false
 				showOxygen = false
 			end
 		end
-		if Config.BeepHud then
-			if (health <= 35) and not (health == 0) and not beepHealth then
-				SendNUIMessage({action = 'healthStart'})
-				beepHealth = true
-			else
+		if Config.pulseHud then
+			if (health <= Config.pulseStart) and not (health == 0) then
+				if not pulseHealth then
+					SendNUIMessage({action = 'healthStart'})
+					pulseHealth = true
+				end
+			elseif (health > Config.pulseStart) and pulseHealth then
 				SendNUIMessage({action = 'healthStop'})
-				beepHealth = false
+				pulseHealth = false
 			end
-			if (armor <= 35) and not (armor == 0) and not beepShield then
-				SendNUIMessage({action = 'armorStart'})
-				beepShield = true
-			else
+			if (armor <= Config.pulseStart) and not (armor == 0) then
+				if not pulseArmor then
+					SendNUIMessage({action = 'armorStart'})
+					pulseArmor = true
+				end
+			elseif (armor > Config.pulseStart) and pulseArmor then
 				SendNUIMessage({action = 'armorStop'})
-				beepShield = false
+				pulseArmor = false
 			end
-			if (stamina <= 35) and not beepStamina then
-				SendNUIMessage({action = 'staminaStart'})
-				beepStamina = true
-			else
+			if (stamina <= Config.pulseStart) then 
+				if not pulseStamina then
+					SendNUIMessage({action = 'staminaStart'})
+					pulseStamina = true
+				end
+			elseif (stamina > Config.pulseStart) and pulseStamina then
 				SendNUIMessage({action = 'staminaStop'})
-				beepStamina = false
+				pulseStamina = false
 			end
-			if (oxygen <= 35) and not (oxygen == 0) and not beepOxygen then
-				SendNUIMessage({action = 'oxygenStart'})
-				beepOxygen = true
-			else
-				SendNUIMessage({action = 'oxygenStop'})
-				beepOxygen = false
+			if (oxygen <= Config.pulseStart) and not (oxygen == 0) then 
+				if not pulseOxygen then
+					SendNUIMessage({action = 'oxygenStart'})
+					pulseOxygen = true
+				end
+			elseif (oxygen > Config.pulseStart) and pulseOxygen then
+				SendNUIMessage({action = 'staminaStop'})
+				pulseStamina = false
 			end
 		end
 		if IsPauseMenuActive() and not isPaused and not isOpen then
@@ -85,13 +118,29 @@ Citizen.CreateThread(function()
 				healthActive = true
 				SendNUIMessage({action = 'healthHide'})
 			end
-			if not shieldActive then
-				shieldActive = true
+			if not armorActive then
+				armorActive = true
 				SendNUIMessage({action = 'armorHide'})
 			end
 			if not staminaActive then
 				staminaActive = true
 				SendNUIMessage({action = 'staminaHide'})
+			end
+			if Config.useESX then
+				if not hungerActive then
+					hungerActive = true
+					SendNUIMessage({action = 'hungerHide'})
+				end
+				if not thirstActive then
+					thirstActive = true
+					SendNUIMessage({action = 'thirstHide'})
+				end
+				if Config.useStress then
+					if not stressActive then
+						stressActive = true
+						SendNUIMessage({action = 'stressHide'})
+					end
+				end
 			end
 			if oxygenActive then
 				oxygenActive = false
@@ -109,57 +158,89 @@ Citizen.CreateThread(function()
 				idActive = false
 				SendNUIMessage({action = 'idHide'})
 			end
-			if movieActive then
-				movieActive = false
-				SendNUIMessage({action = 'movieHide'})
+			if cinematicActive then
+				cinematicActive = false
+				SendNUIMessage({action = 'cinematicHide'})
 			end
 			isPaused = true
-		elseif not IsPauseMenuActive() and isPaused and not movieHud then
+		elseif not IsPauseMenuActive() and isPaused and not cinematicHud then
 			if healthActive and not healthSwitch then
 				healthActive = false
-				SendNUIMessage({action = 'healthT'})
+				SendNUIMessage({action = 'healthShow'})
 			end
-			if shieldActive and not shieldSwitch and not showArmor then
-				shieldActive = false
-				SendNUIMessage({action = 'armorT'})
+			if armorActive and not armorSwitch and not showArmor then
+				armorActive = false
+				SendNUIMessage({action = 'armorShow'})
 			end
 			if staminaActive and not staminaSwitch then
 				staminaActive = false
-				SendNUIMessage({action = 'staminaT'})
+				SendNUIMessage({action = 'staminaShow'})
+			end
+			if Config.useESX then
+				if hungerActive and not hungerSwitch then
+					hungerActive = false
+					SendNUIMessage({action = 'hungerShow'})
+				end
+				if thirstActive and not thirstSwitch then
+					thirstActive = false
+					SendNUIMessage({action = 'thirstShow'})
+				end
+				if Config.useStress then
+					if stressActive and not stressSwitch then
+						stressActive = false
+						SendNUIMessage({action = 'stressShow'})
+					end
+				end
 			end
 			if not oxygenActive and oxygenSwitch and showOxygen then
 				oxygenActive = true
-				SendNUIMessage({action = 'oxygenT'})
+				SendNUIMessage({action = 'oxygenShow'})
 			end
 			if not microphoneActive and microphoneSwitch then
 				microphoneActive = true
-				SendNUIMessage({action = 'microphoneT'})
+				SendNUIMessage({action = 'microphoneShow'})
 			end
 			if not timeActive and timeSwitch then
 				timeActive = true
-				SendNUIMessage({action = 'timeT'})
+				SendNUIMessage({action = 'timeShow'})
 			end
-			if not movieActive and movieSwitch then
-				movieActive = true
-				SendNUIMessage({action = 'movieT'})
+			if not cinematicActive and cinematicSwitch then
+				cinematicActive = true
+				SendNUIMessage({action = 'cinematicShow'})
 			end
 			if not idActive and idSwitch then
 				idActive = true
-				SendNUIMessage({action = 'idT'})
+				SendNUIMessage({action = 'idShow'})
 			end
 			isPaused = false
-		elseif not IsPauseMenuActive() and movieHud and isPaused then
+		elseif not IsPauseMenuActive() and cinematicHud and isPaused then
 			if not healthActive then
 				healthActive = true
 				SendNUIMessage({action = 'healthHide'})
 			end
-			if not shieldActive then
-				shieldActive = true
+			if not armorActive then
+				armorActive = true
 				SendNUIMessage({action = 'armorHide'})
 			end
 			if not staminaActive then
 				staminaActive = true
 				SendNUIMessage({action = 'staminaHide'})
+			end
+			if Config.useESX then
+				if not hungerActive then
+					hungerActive = true
+					SendNUIMessage({action = 'hungerHide'})
+				end
+				if not thirstActive then
+					thirstActive = true
+					SendNUIMessage({action = 'thirstHide'})
+				end
+				if Config.useStress then
+					if not stressActive then
+						stressActive = true
+						SendNUIMessage({action = 'stressHide'})
+					end
+				end
 			end
 			if oxygenActive then
 				oxygenActive = false
@@ -177,27 +258,58 @@ Citizen.CreateThread(function()
 				idActive = false
 				SendNUIMessage({action = 'idHide'})
 			end
-			movieActive = true
-			SendNUIMessage({action = 'movieT'})
+			cinematicActive = true
+			SendNUIMessage({action = 'cinematicShow'})
 			isPaused = false
 		end
-		SendNUIMessage({
-			action = "hud",
-			health = health,
-			armor = armor,
-			stamina = stamina,
-			oxygen = oxygen,
-			id = id,
-			players = players,
-			time = hours .. " : " .. minutes
-		})
-		Citizen.Wait(420)
+		if Config.useESX and not Config.useStress then
+			SendNUIMessage({
+				action = "hud",
+				health = health,
+				armor = armor,
+				stamina = stamina,
+				hunger = hunger,
+				thirst = thirst,
+				stamina = stamina,
+				oxygen = oxygen,
+				id = id,
+				players = players,
+				time = hours .. " : " .. minutes
+			})
+		elseif Config.useESX and Config.useStress then
+			SendNUIMessage({
+				action = "hud",
+				health = health,
+				armor = armor,
+				stamina = stamina,
+				hunger = hunger,
+				thirst = thirst,
+				stress = stress,
+				stamina = stamina,
+				oxygen = oxygen,
+				id = id,
+				players = players,
+				time = hours .. " : " .. minutes
+			})
+		else
+			SendNUIMessage({
+				action = "hud",
+				health = health,
+				armor = armor,
+				stamina = stamina,
+				oxygen = oxygen,
+				id = id,
+				players = players,
+				time = hours .. " : " .. minutes
+			})
+		end
+		Wait(Config.waitTime)
 	end
 end)
 
-Citizen.CreateThread(function()
+CreateThread(function()
     while isOpen do
-        Citizen.Wait(100)
+        Wait(500)
         DisableControlAction(0, 322, true)
     end
 end)
@@ -215,6 +327,40 @@ end)
 
 RegisterNetEvent('PE:change')
 AddEventHandler('PE:change', function(action)
+	if Config.useESX then
+		if action == "hunger" then
+			if not hungerActive then
+				hungerActive = true
+				hungerSwitch = true
+				SendNUIMessage({action = 'hungerHide'})
+			else
+				hungerActive = false
+				hungerSwitch = false
+				SendNUIMessage({action = 'hungerShow'})
+			end
+		elseif action == "thirst" then
+			if not thirstActive then
+				thirstActive = true
+				thirstSwitch = true
+				SendNUIMessage({action = 'thirstHide'})
+			else
+				thirstActive = false
+				thirstSwitch = false
+				SendNUIMessage({action = 'thirstShow'})
+			end
+		end
+		if Config.useStress then
+			if not stressActive then
+				stressActive = true
+				stressSwitch = true
+				SendNUIMessage({action = 'stressHide'})
+			else
+				stressActive = false
+				stressSwitch = false
+				SendNUIMessage({action = 'stressShow'})
+			end
+		end
+	end
     if action == "health" then
 		if not healthActive then
 			healthActive = true
@@ -223,17 +369,17 @@ AddEventHandler('PE:change', function(action)
 		else
 			healthActive = false
 			healthSwitch = false
-			SendNUIMessage({action = 'healthT'})
+			SendNUIMessage({action = 'healthShow'})
 		end
     elseif action == "armor" then
-		if not shieldActive then
-			shieldActive = true
-			shieldSwitch = true
+		if not armorActive then
+			armorActive = true
+			armorSwitch = true
 			SendNUIMessage({action = 'armorHide'})
 		else
-			shieldActive = false
-			shieldSwitch = false
-			SendNUIMessage({action = 'armorT'})
+			armorActive = false
+			armorSwitch = false
+			SendNUIMessage({action = 'armorShow'})
 		end
     elseif action == "stamina" then
 		if not staminaActive then
@@ -243,13 +389,13 @@ AddEventHandler('PE:change', function(action)
 		else
 			staminaActive = false
 			staminaSwitch = false
-			SendNUIMessage({action = 'staminaT'})
+			SendNUIMessage({action = 'staminaShow'})
 		end
 	elseif action == "oxygen" then
 		if not oxygenActive then
 			oxygenActive = true
 			oxygenSwitch = true
-			SendNUIMessage({action = 'oxygenT'})
+			SendNUIMessage({action = 'oxygenShow'})
 		else
 			oxygenActive = false
 			oxygenSwitch = false
@@ -259,7 +405,7 @@ AddEventHandler('PE:change', function(action)
 		if not idActive then
 			idActive = true
 			idSwitch = true
-			SendNUIMessage({action = 'idT'})
+			SendNUIMessage({action = 'idShow'})
 		else
 			idActive = false
 			idSwitch = false
@@ -273,22 +419,38 @@ AddEventHandler('PE:change', function(action)
 			showMap = false
 			DisplayRadar(false)
 		end
-	elseif action == "movie" then
-		if not movieActive then
-			movieActive = true
-			movieSwitch = true
-			movieHud = true
+	elseif action == "cinematic" then
+		if not cinematicActive then
+			cinematicActive = true
+			cinematicSwitch = true
+			cinematicHud = true
 			if not healthActive then
 				healthActive = true
 				SendNUIMessage({action = 'healthHide'})
 			end
-			if not shieldActive then
-				shieldActive = true
+			if not armorActive then
+				armorActive = true
 				SendNUIMessage({action = 'armorHide'})
 			end
 			if not staminaActive then
 				staminaActive = true
 				SendNUIMessage({action = 'staminaHide'})
+			end
+			if Config.useESX then
+				if not hungerActive then
+					hungerActive = true
+					SendNUIMessage({action = 'hungerHide'})
+				end
+				if not thirstActive then
+					thirstActive = true
+					SendNUIMessage({action = 'thirstHide'})
+				end
+				if Config.useStress then
+					if not stressActive then
+						stressActive = true
+						SendNUIMessage({action = 'stressHide'})
+					end
+				end
 			end
 			if oxygenActive then
 				oxygenActive = false
@@ -306,50 +468,66 @@ AddEventHandler('PE:change', function(action)
 				idActive = false
 				SendNUIMessage({action = 'idHide'})
 			end
-			SendNUIMessage({action = 'movieT'})
+			SendNUIMessage({action = 'cinematicShow'})
 		else
-			movieActive = false
-			movieSwitch = false
-			movieHud = false
+			cinematicActive = false
+			cinematicSwitch = false
+			cinematicHud = false
 			if healthActive and not healthSwitch then
 				healthActive = false
-				SendNUIMessage({action = 'healthT'})
+				SendNUIMessage({action = 'healthShow'})
 			end
-			if shieldActive and not shieldSwitch and not showArmor then
-				shieldActive = false
-				SendNUIMessage({action = 'armorT'})
+			if armorActive and not armorSwitch and not showArmor then
+				armorActive = false
+				SendNUIMessage({action = 'armorShow'})
 			end
 			if staminaActive and not staminaSwitch then
 				staminaActive = false
-				SendNUIMessage({action = 'staminaT'})
+				SendNUIMessage({action = 'staminaShow'})
+			end
+			if Config.useESX then
+				if hungerActive and not hungerSwitch then
+					hungerActive = false
+					SendNUIMessage({action = 'hungerShow'})
+				end
+				if thirstActive and not thirstSwitch then
+					thirstActive = false
+					SendNUIMessage({action = 'thirstShow'})
+				end
+				if Config.useStress then
+					if stressActive and not stressSwitch then
+						stressActive = false
+						SendNUIMessage({action = 'stressShow'})
+					end
+				end
 			end
 			if not oxygenActive and oxygenSwitch and showOxygen then
 				oxygenActive = true
-				SendNUIMessage({action = 'oxygenT'})
+				SendNUIMessage({action = 'oxygenShow'})
 			end
 			if not microphoneActive and microphoneSwitch then
 				microphoneActive = true
-				SendNUIMessage({action = 'microphoneT'})
+				SendNUIMessage({action = 'microphoneShow'})
 			end
 			if not timeActive and timeSwitch then
 				timeActive = true
-				SendNUIMessage({action = 'timeT'})
+				SendNUIMessage({action = 'timeShow'})
 			end
-			if not movieActive and movieSwitch then
-				movieActive = true
-				SendNUIMessage({action = 'movieT'})
+			if not cinematicActive and cinematicSwitch then
+				cinematicActive = true
+				SendNUIMessage({action = 'cinematicShow'})
 			end
 			if not idActive and idSwitch then
 				idActive = true
-				SendNUIMessage({action = 'idT'})
+				SendNUIMessage({action = 'idShow'})
 			end
-			SendNUIMessage({action = 'movieHide'})
+			SendNUIMessage({action = 'cinematicHide'})
 		end
 	elseif action == "time" then
 		if not timeActive then
 			timeActive = true
 			timeSwitch = true
-			SendNUIMessage({action = 'timeT'})
+			SendNUIMessage({action = 'timeShow'})
 		else
 			timeActive = false
 			timeSwitch = false
@@ -359,7 +537,7 @@ AddEventHandler('PE:change', function(action)
 		if not microphoneActive then
 			microphoneActive = true
 			microphoneSwitch = true
-			SendNUIMessage({action = 'microphoneT'})
+			SendNUIMessage({action = 'microphoneShow'})
 		else
 			microphoneActive = false
 			microphoneSwitch = false
@@ -368,9 +546,26 @@ AddEventHandler('PE:change', function(action)
     end
 end)
 
+if Config.useESX then
+	RegisterNetEvent("esx_status:onTick")
+	AddEventHandler("esx_status:onTick", function(status)
+		TriggerEvent('esx_status:getStatus', 'hunger', function(status)
+			hunger = status.val / 10000
+		end)
+		TriggerEvent('esx_status:getStatus', 'thirst', function(status)
+			thirst = status.val / 10000
+		end)
+		if Config.useStress then
+			TriggerEvent('esx_status:getStatus', 'stress', function(status)
+				stress = status.val / 10000
+			end)
+		end
+	end)
+end
+
 -- Opening Menu
 RegisterCommand('hud', function()
-	if not isOpen then
+	if not isOpen and not isPaused then
 		isOpen = true
 		SendNUIMessage({ action = 'show' })
 		SetNuiFocus(true, true)
@@ -385,7 +580,7 @@ RegisterCommand('+levelVoice', function()
 			microphone = microphone
 		})
 	elseif (microphone == 66) then
-		microphone = scream
+		microphone = shout
 		SendNUIMessage({
 			action = "microphone",
 			microphone = microphone
@@ -399,11 +594,22 @@ RegisterCommand('+levelVoice', function()
 	end
 end)
 
-RegisterKeyMapping('hud', 'Open the hud menu', 'keyboard', Config.openKey)
+RegisterKeyMapping('hud', 'Open hud menu', 'keyboard', Config.openKey)
 
-RegisterKeyMapping('+levelVoice', 'Do not use', 'keyboard', Config.VoiceChange)
+RegisterKeyMapping('+levelVoice', 'Adjust just the voice range', 'keyboard', Config.voiceKey)
 
 -- Handler
 AddEventHandler('playerSpawned', function()
 	DisplayRadar(false)
+	Wait(Config.waitSpawn)
+	SendNUIMessage({ action = 'setPosition' })
+	SendNUIMessage({ action = 'setColors' })
+end)
+
+AddEventHandler('onResourceStart', function(resourceName)
+	if (GetCurrentResourceName() == resourceName) then
+		Wait(Config.waitResource)
+		SendNUIMessage({ action = 'setPosition' })
+		SendNUIMessage({ action = 'setColors' })
+	end
 end)

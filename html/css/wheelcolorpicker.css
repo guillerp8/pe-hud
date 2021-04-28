@@ -12,7 +12,7 @@
  * plugin. These values might change on the fly.
  */
 
-:root {
+ :root {
 	--neonbluecolord:#405756 ;
 	--pinkredcolord:#3c051d;
 }
@@ -52,8 +52,8 @@
   background-size: contain;
   position: relative;
   float: left;
-  width: 120px;
-  height: 120px;
+  width: 90px;
+  height: 90px;
   -webkit-border-radius: 90px;
   -moz-border-radius: 50%;
   border-radius: 50%;
@@ -94,8 +94,8 @@
 .jQWCP-slider-wrapper,
 .jQWCP-wPreview {
   position: relative;
-  width: 20px;
-  height: 120px;
+  width: 15px;
+  height: 90px;
   float: left;
   margin-right: 8px;
 }

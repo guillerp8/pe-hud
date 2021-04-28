@@ -4,15 +4,14 @@
   src: url('../fonts/KumbhSans-Bold.ttf');
 }
 
-#main {
+.main {
   position: absolute;
-  bottom: 89%;
+  bottom: 0%;
   left: 50%;
-  margin-right: -50%;
-  margin-bottom: -50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0%);
 }
 
+/* Header of Menu*/
 #title-hud {
   color:white;
   font-family: Kum; 
@@ -35,19 +34,6 @@
   position:relative;
   order: 3;
   margin-top: 5px;
-}
-
-.progressplayer {
-  -webkit-transition: 0.35s stroke-dashoffset;
-  -o-transition: 0.35s stroke-dashoffset;
-  transition: 0.35s stroke-dashoffset;
-  -webkit-transform: rotate(270deg);
-  -ms-transform: rotate(270deg);
-  transform: rotate(270deg);
-  -webkit-transform-origin: 50% 50%;
-  -ms-transform-origin: 50% 50%;
-  transform-origin: 50% 50%;
-  overflow:none;
 }
 
 #time {
@@ -102,7 +88,7 @@
   width: 30%;
   left: 50%;
   margin-right: -50%;
-  transform: translate(-50%, 25%)
+  transform: translate(-50%, 25%);
 }
 
 .browser-window-osx .header {
@@ -123,8 +109,8 @@
   font-size:16px;
   color: #fff;
   float: right;
-  width:185px;
-  height:30px;
+  width: 155px;
+  height: 30px;
   border-radius: 5px;
   transition: all 0.1s;
 	background: black;
@@ -141,4 +127,20 @@
 .footer-center {
   display: flex;
   justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+/* Progress Bar*/
+.progressplayer {
+  -webkit-transition: 0.35s stroke-dashoffset;
+  -o-transition: 0.35s stroke-dashoffset;
+  transition: 0.35s stroke-dashoffset;
+  -webkit-transform: rotate(270deg);
+  -ms-transform: rotate(270deg);
+  transform: rotate(270deg);
+  -webkit-transform-origin: 50% 50%;
+  -ms-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  overflow:none;
+  stroke-linecap: round;
 }
