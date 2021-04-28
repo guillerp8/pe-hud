@@ -262,22 +262,29 @@ CreateThread(function()
 			SendNUIMessage({action = 'cinematicShow'})
 			isPaused = false
 		end
-		if Config.useESX then
-			SendNUIMessage({
-				action = "hud",
-				stamina = stamina,
-				hunger = hunger
-			})
-			if Config.useStress then
-				SendNUIMessage({
-					action = "hud",
-					stress = stress
-				})
-			end
+		if Config.useESX and not Config.useStress then
 			SendNUIMessage({
 				action = "hud",
 				health = health,
 				armor = armor,
+				stamina = stamina,
+				hunger = hunger,
+				thirst = thirst,
+				stamina = stamina,
+				oxygen = oxygen,
+				id = id,
+				players = players,
+				time = hours .. " : " .. minutes
+			})
+		elseif Config.useESX and Config.useStress then
+			SendNUIMessage({
+				action = "hud",
+				health = health,
+				armor = armor,
+				stamina = stamina,
+				hunger = hunger,
+				thirst = thirst,
+				stress = stress,
 				stamina = stamina,
 				oxygen = oxygen,
 				id = id,
@@ -302,7 +309,7 @@ end)
 
 CreateThread(function()
     while isOpen do
-        Wait(100)
+        Wait(500)
         DisableControlAction(0, 322, true)
     end
 end)
@@ -548,18 +555,13 @@ if Config.useESX then
 		TriggerEvent('esx_status:getStatus', 'thirst', function(status)
 			thirst = status.val / 10000
 		end)
+		TriggerEvent('esx_status:getStatus', 'stress', function(status)
+			stress = status.val / 10000
+		end)
 	end)
 end
 
 -- Opening Menu
-RegisterCommand('getPos', function()
-	SendNUIMessage({ action = 'setPosition' })
-end)
-
-RegisterCommand('getColor', function()
-	SendNUIMessage({ action = 'setColors' })
-end)
-
 RegisterCommand('hud', function()
 	if not isOpen and not isPaused then
 		isOpen = true
@@ -597,7 +599,15 @@ RegisterKeyMapping('+levelVoice', 'Adjust Voice Range', 'keyboard', Config.voice
 -- Handler
 AddEventHandler('playerSpawned', function()
 	DisplayRadar(false)
-	Wait(5000)
+	Wait(Config.waitSpawn)
 	SendNUIMessage({ action = 'setPosition' })
 	SendNUIMessage({ action = 'setColors' })
+end)
+
+AddEventHandler('onResourceStart', function(resourceName)
+	if (GetCurrentResourceName() == resourceName) then
+		Wait(Config.waitResource)
+		SendNUIMessage({ action = 'setPosition' })
+		SendNUIMessage({ action = 'setColors' })
+	end
 end)

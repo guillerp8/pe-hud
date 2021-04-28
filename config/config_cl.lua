@@ -8,7 +8,10 @@ Config.hideOxygen   = true
 Config.pulseHud     = true -- Pulse Effect when status is below the configured amount.
 Config.pulseStart   = 35 -- Minimal value for pulse to start.
 
+-- Wait times
 Config.waitTime     = 420  -- Set to 100 so the hud is more fluid. However, performance will be affected.
+Config.waitSpawn    = 5000 -- Time to set elements back to saved on spawn
+Config.waitResource = 2000 -- Time to set elements back to saved after resource start
 
 -- Variables (Controls)
 Config.voiceChange  = 'z'

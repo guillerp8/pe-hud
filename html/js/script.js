@@ -276,7 +276,6 @@ $(function () {
       case "health-option":
         $('#health-circle').css('stroke', color);
         localStorage.setItem("healthColor", color);
-        print(color)
       break;
 
       case "armor-option":
@@ -349,34 +348,61 @@ $("#close").click(function () { $.post('https://pe-hud/close');});
 $("#reset-position").click(function () {
   if (Config.useESX) {
     $("#hunger").animate({top: "0px", left: "0px"});
+    localStorage.setItem("hungerTop", "0px");
+    localStorage.setItem("hungerLeft", "0px");
     $("#thirst").animate({top: "0px", left: "0px"});
+    localStorage.setItem("thirstTop", "0px");
+    localStorage.setItem("thirstLeft", "0px");
     if (Config.useStress) {
       $("#stress").animate({top: "0px", left: "0px"});
+      localStorage.setItem("stressTop", "0px");
+      localStorage.setItem("stressLeft", "0px");
     };
   };
   $("#health").animate({ top: "0px", left: "0px" });
+  localStorage.setItem("healthTop", "0px");
+  localStorage.setItem("healthLeft", "0px");
   $("#armor").animate({ top: "0px", left: "0px" });
+  localStorage.setItem("armorTop", "0px");
+  localStorage.setItem("armorLeft", "0px");
   $("#stamina").animate({ top: "0px", left: "0px" });
+  localStorage.setItem("staminaTop", "0px");
+  localStorage.setItem("staminaLeft", "0px");
   $("#oxygen").animate({ top: "0px", left: "0px" });
+  localStorage.setItem("oxygenTop", "0px");
+  localStorage.setItem("oxygenLeft", "0px");
   $("#id").animate({ top: "0px", left: "0px" });
+  localStorage.setItem("idTop", "0px");
+  localStorage.setItem("idLeft", "0px");
   $("#time").animate({ top: "0px", left: "50%" });
   $("#microphone").animate({ top: "0px", left: "0px" });
+  localStorage.setItem("microphoneTop", "0px");
+  localStorage.setItem("microphoneLeft", "0px");
 });
 
 $("#reset-color").click(function () {
   if (Config.useESX) {
     $('#hunger-circle').css('stroke', '');
+    localStorage.setItem("hungerColor", '');
     $('#thirst-circle').css('stroke', '');
+    localStorage.setItem("thirstColor", '');
     if (Config.useStress) {
       $('#stress-circle').css('stroke', '');
+      localStorage.setItem("stressColor", '');
     };
   };
   $('#health-circle').css('stroke', '');
+  localStorage.setItem("healthColor", '');
   $('#armor-circle').css('stroke', '');
+  localStorage.setItem("armorColor", '');
   $('#stamina-circle').css('stroke', '');
+  localStorage.setItem("staminaColor", '');
   $('#oxygen-circle').css('stroke', '');
+  localStorage.setItem("oxygenColor", '');
   $('#microphone-circle').css('stroke', '');
+  localStorage.setItem("microphoneColor", '');
   $('#id-circle').css('stroke', '');
+  localStorage.setItem("idColor", '');
   $('#time').css('color', '');
 });
 // Color picker function
