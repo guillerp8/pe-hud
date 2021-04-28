@@ -40,7 +40,7 @@
         <image href="img/armor.png" height="17" width="17" x="16" y="27"></image>
       </svg>
 
-      <!--
+      
         <svg class="circle" id="hunger" width="60" height="60">
         <circle class="progressplayer hunger" id="hunger-circle" stroke="#ffa200" stroke-width="4.5" style="stroke-opacity: 1.0" fill="#000000" r="20" cx="24" cy="24" stroke-dasharray="70 30" stroke-dashoffset="0"/>
         <image class="a" href="img/hunger.png" height="17" width="17" x="16" y="27"></image>
@@ -50,13 +50,11 @@
         <circle class="progressplayer thirst" id="thirst-circle" stroke="#00b6e3" stroke-width="4.5" style="stroke-opacity: 1.0" fill="#000000" r="20" cx="24" cy="24" stroke-dasharray="70 30" stroke-dashoffset="0"/>
         <image href="img/thirst.png" height="17" width="17" x="16" y="27"></image>
       </svg>
-    -->
-    <!--
+    
       <svg class="circle" id="stress" width="60" height="60">
         <circle class="progressplayer stress" id="stress-circle" stroke="#A118DB" stroke-width="4.5" style="stroke-opacity: 1.0" fill="#000000" r="20" cx="24" cy="24" stroke-dasharray="70 30" stroke-dashoffset="0"/>
         <image href="img/stress.png" height="17" width="17" x="16" y="27"></image>
       </svg>
-    -->
 
       <svg class="circle" id="stamina" width="60" height="60">
         <circle class="progressplayer stamina" id="stamina-circle" stroke="#FFC100" stroke-width="4.5" style="stroke-opacity: 1.0" fill="#000000" r="20" cx="24" cy="24" stroke-dasharray="70 30" stroke-dashoffset="0"/>
@@ -159,8 +157,7 @@
                 <span class="slider round"></span>
               </label>
             </div>
-            <!--
-            <div class="test-right">
+            <div id="hunger-thirst" class="test-right">
               <image src="./img/hunger.png" alt="Image did not load correctly">
 
               <label class="switch buttonleft3" >
@@ -175,14 +172,14 @@
                 <span class="slider round"></span>
               </label>
 
-              <image src="./img/stress.png" alt="Image did not load correctly">
+              <image id="stress-show"src="./img/stress.png" alt="Image did not load correctly">
 
-              <label class="switch buttoncenter3" >
+              <label id="stress-button" class="switch buttoncenter3" >
                 <input type="checkbox" id="stress-switch" checked>
                 <span class="slider round"></span>
               </label> 
             </div>
-            -->
+
             <div class="buttons-center">
               <button type="button" class="button-left" id="reset-position">Reset position</button>
               <button type="button" class="button-right" id="reset-color">Reset colors</button>
@@ -192,9 +189,9 @@
               <select id="selection">
                 <option class="options" value="health-option" selected>Health</option>
                 <option class="options" value="armor-option">Armor</option>
-                <!--<option class="options" value="hunger-option">Hunger</option>
-                <option class="options" value="thirst-option">Thirst</option>
-              <option class="options" value="stress-option">Stress</option>-->
+                <option id="hunger-option" class="options" value="hunger-option">Hunger</option>
+                <option id="thirst-option" class="options" value="thirst-option">Thirst</option>
+                <option id="stress-option" class="options" value="stress-option">Stress</option>
                 <option class="options" value="stamina-option">Stamina</option>
                 <option class="options" value="oxygen-option">Oxygen</option>
                 <option class="options" value="microphone-option">Microphone</option>

@@ -1,3 +1,33 @@
+$(document).ready(function() {
+  if (Config.useESX) {
+    document.getElementById("hunger").style.display = "";
+    document.getElementById("thirst").style.display = "";
+    document.getElementById("hunger-thirst").style.display = "";
+    document.getElementById("hunger-option").style.display = "";
+    document.getElementById("thirst-option").style.display = "";
+    document.getElementById("stress").style.display = "none";
+    document.getElementById("stress-show").style.display = "none";
+    document.getElementById("stress-button").style.display = "none";
+    document.getElementById("stress-option").style.display = "none";
+    if (Config.useStress) {
+      document.getElementById("stress").style.display = "";
+      document.getElementById("stress-show").style.display = "";
+      document.getElementById("stress-button").style.display = "";
+      document.getElementById("stress-option").style.display = "";
+    };
+  } else {
+    document.getElementById("hunger").style.display = "none";
+    document.getElementById("thirst").style.display = "none";
+    document.getElementById("stress").style.display = "none";
+    document.getElementById("hunger-thirst").style.display = "none";
+    document.getElementById("stress-show").style.display = "none";
+    document.getElementById("stress-button").style.display = "none";
+    document.getElementById("hunger-option").style.display = "none";
+    document.getElementById("thirst-option").style.display = "none";
+    document.getElementById("stress-option").style.display = "none";
+  };
+});
+
 // Set everything to be draggable
 $(function() {
   if (Config.useESX) {
@@ -211,7 +241,7 @@ window.addEventListener("message", function(event) {
     break;
     
     case "stressHide":
-      $("#stress").fadeOut();
+      $("#stress").fadeIn();
     break;
 
     case "oxygenShow":
