@@ -14,10 +14,10 @@ Config.waitSpawn    = 5000 -- Time to set elements back to saved on spawn
 Config.waitResource = 2000 -- Time to set elements back to saved after resource start
 
 -- Variables (Controls)
-Config.voiceChange  = 'z'
-Config.openKey      = 'f7'
+Config.voiceKey     = 'z' -- Cycles through modes (has to match your voip script key)
+Config.openKey      = 'f7' -- Key for opening the customizing menu
 Config.oxygenMax    = 10 -- Set to 10 / 4 if using vMenu
 
 -- Variables (Framework)
-Config.useESX       = false -- Change ESX config to true in ./html/js/config.lua and follow instructions
-Config.useStress    = false
+Config.useESX       = false -- Change ESX config to true to use ESX
+Config.useStress    = false -- Use ESX stress from by Utku (https://github.com/utkuali/Stress-System-by-utku)

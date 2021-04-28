@@ -594,9 +594,9 @@ RegisterCommand('+levelVoice', function()
 	end
 end)
 
-RegisterKeyMapping('hud', 'Open hud Menu', 'keyboard', Config.openKey)
+RegisterKeyMapping('hud', 'Open hud menu', 'keyboard', Config.openKey)
 
-RegisterKeyMapping('+levelVoice', 'Adjust Voice Range', 'keyboard', Config.voiceChange)
+RegisterKeyMapping('+levelVoice', 'Adjust just the voice range', 'keyboard', Config.voiceKey)
 
 -- Handler
 AddEventHandler('playerSpawned', function()
