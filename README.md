@@ -14,7 +14,7 @@ This project does not contain a license, therefore you are not allowed to add on
  - Config for ESX and [Stress](https://github.com/utkuali/Stress-System-by-utku)
 
 # Video/Screenshot
-[![Watch the video](https://imgur.com/a/zvRMjZl.png)](https://streamable.com/xtfytg)
+[[Watch the video](https://imgur.com/a/zvRMjZl.png)](https://streamable.com/xtfytg)
 
 # Acknowledgement
 [Progress Circle](https://github.com/nafing/esx_nafing_hud/blob/master/html/main.js#L59)
