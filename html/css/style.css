@@ -11,6 +11,7 @@
   transform: translate(-50%, 0%);
 }
 
+/* Header of Menu*/
 #title-hud {
   color:white;
   font-family: Kum; 
@@ -35,18 +36,7 @@
   margin-top: 5px;
 }
 
-.progressplayer {
-  -webkit-transition: 0.35s stroke-dashoffset;
-  -o-transition: 0.35s stroke-dashoffset;
-  transition: 0.35s stroke-dashoffset;
-  -webkit-transform: rotate(270deg);
-  -ms-transform: rotate(270deg);
-  transform: rotate(270deg);
-  -webkit-transform-origin: 50% 50%;
-  -ms-transform-origin: 50% 50%;
-  transform-origin: 50% 50%;
-  overflow:none;
-}
+
 
 #time {
   position: relative;
@@ -100,7 +90,7 @@
   width: 30%;
   left: 50%;
   margin-right: -50%;
-  transform: translate(-50%, 25%)
+  transform: translate(-50%, 25%);
 }
 
 .browser-window-osx .header {
@@ -140,4 +130,18 @@
   display: flex;
   justify-content: space-evenly;
   margin-bottom: 10px;
+}
+
+/* Progress Bar*/
+.progressplayer {
+  -webkit-transition: 0.35s stroke-dashoffset;
+  -o-transition: 0.35s stroke-dashoffset;
+  transition: 0.35s stroke-dashoffset;
+  -webkit-transform: rotate(270deg);
+  -ms-transform: rotate(270deg);
+  transform: rotate(270deg);
+  -webkit-transform-origin: 50% 50%;
+  -ms-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  overflow:none;
 }
