@@ -7,7 +7,7 @@ AddEventHandler('onResourceStart', function(resourceName)
 			if currentVersion ~= latestVersion and tonumber(currentVersion) < tonumber(latestVersion) then
 				print(name .. " ^1is outdated.\nCurrent version: ^8" .. currentVersion .. "\nNewest version: ^2" .. latestVersion .. "\n^3Update^7: https://github.com/Project-Entity/pe-hud/tree/dev")
 			elseif tonumber(currentVersion) > tonumber(latestVersion) then
-				print(name .. " has skipped the latest version ^2" .. latestVersion .. "Either Github is offline or ./server/version has been changed")
+				print(name .. " has skipped the latest version ^2" .. latestVersion .. ". Either Github is offline or the version file has been changed")
 			else
 				print(name .. " is updated. ^3Settings saved values to players...")
 				Wait(3000)
