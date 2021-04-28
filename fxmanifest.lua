@@ -13,11 +13,6 @@ client_scripts {
 	'client/hud_cl.lua'
 }
 
-server_scripts {
-	'config/config_sv.lua',
-	'server/hud_sv.lua'
-}
-
 ui_page 'html/ui.html'
 
 files {

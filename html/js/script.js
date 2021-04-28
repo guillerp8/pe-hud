@@ -48,9 +48,7 @@ $(function() {
   });
   $("#drag-browser").draggable();
 
-  $("#close").click(function () {
-    $("#health").animate({top: "-400", left: "-200"});
-  })
+
 } );
 
 // Switches & Cases
@@ -269,12 +267,6 @@ $("#time-switch").click(function () { $.post('https://pe-hud/change', JSON.strin
 $("#microphone-switch").click(function () { $.post('https://pe-hud/change', JSON.stringify({ action: 'microphone' })) })
 $("#close").click(function () { $.post('https://pe-hud/close') })
 $("#reset").click(function () { $("#drag-browser").animate({ top: "", left: "50%" }); })
-
-$("#close").click(function () {
-  let healthColor = $('#health-circle').css('stroke')
-   $.post('https://pe-hud/saveColors', JSON.stringify({ data: "#ccc" }));
-  console.log(healthColor)
-});
 
 $("#reset-position").click(function () {
   if (Config.useESX) {
