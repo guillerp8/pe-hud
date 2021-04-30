@@ -10,7 +10,6 @@ local microphone = normal -- Change this for default (whisper, normal, shout)
 
 if Config.useESX then
     ESX              = nil
-    local PlayerData = {}
 
     CreateThread(function()
         while ESX == nil do
