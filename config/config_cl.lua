@@ -20,4 +20,4 @@ Config.oxygenMax    = 10 -- Set to 10 / 4 if using vMenu
 
 -- Variables (Framework)
 Config.useESX       = false -- Change ESX config to true to use ESX (change ./html/js/config.js Config.useESX to true too)
-Config.useStress    = false -- Use ESX stress from by Utku (https://github.com/utkuali/Stress-System-by-utku)
+Config.useStress    = false -- Use ESX stress by Utku (https://github.com/utkuali/Stress-System-by-utku)
