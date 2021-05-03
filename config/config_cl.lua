@@ -19,5 +19,5 @@ Config.openKey      = 'f7' -- Key for opening the customizing menu
 Config.oxygenMax    = 10 -- Set to 10 / 4 if using vMenu
 
 -- Variables (Framework)
-Config.useESX       = false -- Change ESX config to true to use ESX
-Config.useStress    = false -- Use ESX stress from by Utku (https://github.com/utkuali/Stress-System-by-utku)
+Config.useESX       = true -- Change ESX config to true to use ESX
+Config.useStress    = true -- Use ESX stress from by Utku (https://github.com/utkuali/Stress-System-by-utku)
