@@ -349,14 +349,16 @@ AddEventHandler('PE:change', function(action)
 			end
 		end
 		if Config.useStress then
-			if not stressActive then
-				stressActive = true
-				stressSwitch = true
-				SendNUIMessage({action = 'stressHide'})
-			else
-				stressActive = false
-				stressSwitch = false
-				SendNUIMessage({action = 'stressShow'})
+			if action == "stress" then
+				if not stressActive then
+					stressActive = true
+					stressSwitch = true
+					SendNUIMessage({action = 'stressHide'})
+				else
+					stressActive = false
+					stressSwitch = false
+					SendNUIMessage({action = 'stressShow'})
+				end
 			end
 		end
 	end
