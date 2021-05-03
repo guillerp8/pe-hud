@@ -107,6 +107,7 @@ $(function() {
     }
   });
   $("#drag-browser").draggable();
+  print(document.getElementById("health-switch").checked)
 });
 
 // Switches & Cases
@@ -154,10 +155,20 @@ window.addEventListener("message", function(event) {
 
     case "setSwitches":
       if (Config.useESX) {
-
+        document.getElementById("hunger-switch").checked
+        document.getElementById("thirst-switch").checked
         if (Config.useStress) {
-
+          document.getElementById("stress-switch").checked
         };
+        document.getElementById("health-switch").checked
+        document.getElementById("armor-switch").checked
+        document.getElementById("stamina-switch").checked
+        document.getElementById("id-switch").checked
+        document.getElementById("oxygen-switch").checked
+        document.getElementById("microphone-switch").checked
+        document.getElementById("map-switch").checked
+        document.getElementById("time-switch").checked
+        document.getElementById("cinematic-switch").checked
       };
     break;
 
