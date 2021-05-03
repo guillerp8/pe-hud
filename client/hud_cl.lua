@@ -611,5 +611,6 @@ AddEventHandler('onResourceStart', function(resourceName)
 		Wait(Config.waitResource)
 		SendNUIMessage({ action = 'setPosition' })
 		SendNUIMessage({ action = 'setColors' })
+		SendNUIMessage({ action = 'setSwitches' })
 	end
 end)

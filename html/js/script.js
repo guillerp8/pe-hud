@@ -152,6 +152,15 @@ window.addEventListener("message", function(event) {
       $("#id").animate({ top: localStorage.getItem("idTop"), left: localStorage.getItem("idLeft") });
     break;
 
+    case "setSwitches":
+      if (Config.useESX) {
+
+        if (Config.useStress) {
+
+        };
+      };
+    break;
+
     // Send Data
     case "hud":
       if (Config.useESX) {
