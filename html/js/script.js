@@ -52,7 +52,7 @@ $(function() {
         drag: function(event, ui){
           dragpositionStressTop = ui.position.top;
           dragpositionStressLeft = ui.position.left;
-          localStorage.setItem("stressTop", dragpositionHungerTop);
+          localStorage.setItem("stressTop", dragpositionStressTop);
           localStorage.setItem("stressLeft", dragpositionStressLeft);
         }
       });
