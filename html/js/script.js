@@ -240,7 +240,7 @@ window.addEventListener("message", function(event) {
       $("#thirst").fadeIn();
     break;
     
-    case "stressHide":
+    case "stressShow":
       $("#stress").fadeIn();
     break;
 
