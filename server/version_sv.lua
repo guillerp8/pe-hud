@@ -15,6 +15,6 @@ AddEventHandler('onResourceStart', function(resourceName)
 			end
 		end
 	
-		PerformHttpRequest("https://raw.githubusercontent.com/Project-Entity/pe-hud/dev/version", checkVersion, "GET")
+		PerformHttpRequest("https://raw.githubusercontent.com/Project-Entity/pe-hud/main/version", checkVersion, "GET")
 	end
 end)
